@@ -1,30 +1,29 @@
-﻿<html>
-<head>
-    <title>grunt-html-build - Test Page</title>
-    <!-- build:style bundle -->
-    <link rel="stylesheet" type="text/css" href="/path/to/css/dev.css" />
-    <!-- /build -->
-    <!-- build:style inline test -->
-    <link rel="stylesheet" type="text/css" href="/path/to/css/dev-inline.css" />
-    <!-- /build -->
-</head>
-<body id="landing-page">
-    <!-- build:section views -->
-    <!-- /build -->
+<html>
+    
+    <head>
+        <title>grunt-html-build - Test Page</title>
+        <link type="text/css" rel="stylesheet" href="../fixtures/css/libs.css" />
+        <link type="text/css" rel="stylesheet" href="../fixtures/css/dev.css" />
+        <style>
+            .this-is-inline {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    
+    <body id="landing-page">
+        <div id="view1">...</div>
+        <div id="view2">...</div>
+        <div id="view3">...</div>
+        <script type="text/javascript" src="../fixtures/scripts/app.js"></script>
+        <script type="text/javascript" src="../fixtures/scripts/libs.js"></script>
+        <script type="text/javascript">
+            var version = "0.1.0",
+                title = "test";
+        </script>
+        <script type="text/javascript">
+            productionMain();
+        </script>
+    </body>
 
-    <!-- build:remove -->
-    <script type="text/javascript" src="/path/to/js/only-dev.js"></script>
-    <!-- /build -->
-
-    <!-- build:script bundle -->
-    <script type="text/javascript" src="/path/to/js/libs/jquery.js"></script>
-    <script type="text/javascript" src="/path/to/js/libs/knockout.js"></script>
-    <script type="text/javascript" src="/path/to/js/libs/underscore.js"></script>
-    <script type="text/javascript" src="/path/to/js/app/module1.js"></script>
-    <script type="text/javascript" src="/path/to/js/app/module2.js"></script>
-    <!-- /build -->
-
-    <!-- build:section templates -->
-    <!-- /build -->
-</body>
 </html>

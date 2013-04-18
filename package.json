@@ -1,0 +1,34 @@
+{
+  "name": "grunt-html-build",
+  "description": "Grunt HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options",
+  "version": "0.1.1",
+  "homepage": "https://github.com/spatools/grunt-html-build.git",
+  "author": {
+    "name": "SPA Tools",
+    "url": "http://github.com/spatools/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/spatools/grunt-html-build.git"
+  },
+  "bugs": {
+    "url": "https://github.com/spatools/grunt-html-build/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "js-beautify": "~1.3.1"
+  },
+  "peerDependecies": {
+    "grunt": "0.4.x"
+  },
+  "keywords": [
+    "gruntplugin",
+    "grunt",
+    "htmlbuild",
+    "html",
+    "build",
+    "htmlgen",
+    "generate",
+    "link"
+  ]
+}

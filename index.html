@@ -1,0 +1,41 @@
+﻿<html>
+<head>
+    <title>grunt-html-build - Test Page</title>
+    <!-- build:style bundle -->
+    <link rel="stylesheet" type="text/css" href="/path/to/css/dev.css" />
+    <!-- /build -->
+    <!-- build:style inline test -->
+    <link rel="stylesheet" type="text/css" href="/path/to/css/dev-inline.css" />
+    <!-- /build -->
+</head>
+<body id="landing-page">
+    <!-- build:section views -->
+    <!-- /build -->
+
+    <!-- build:remove -->
+    <script type="text/javascript" src="/path/to/js/only-dev.js"></script>
+    <!-- /build -->
+
+    <!-- build:script bundle -->
+    <script type="text/javascript" src="/path/to/js/libs/jquery.js"></script>
+    <script type="text/javascript" src="/path/to/js/libs/knockout.js"></script>
+    <script type="text/javascript" src="/path/to/js/libs/underscore.js"></script>
+    <script type="text/javascript" src="/path/to/js/app/module1.js"></script>
+    <script type="text/javascript" src="/path/to/js/app/module2.js"></script>
+    <!-- /build -->
+    <!-- build:process -->
+    <script type="text/javascript">
+        var version = "<%= version %>",
+            title = "<%= title %>";
+    </script>
+    <!-- /build -->
+    <!-- build:script inline main -->
+    <script type="text/javascript">
+        main();
+    </script>
+    <!-- /build -->
+
+    <!-- build:section optional test -->
+    <!-- /build -->
+</body>
+</html>

@@ -29,20 +29,27 @@ module.exports = function (grunt) {
 
     var // Init 
         _ = grunt.util._,
+        EOL = grunt.util.linefeed,
         path = require('path'),
+        beautifier = require('js-beautify'),
+        beautify = {
+            js: beautifier.js,
+            css: beautifier.css,
+            html: beautifier.html
+        },
 
         // Tags Regular Expressions
-        regexTagStart = /<!--\s*build:(\w+)\s*(inline)?\s*(.+)\s*-->/, // <!-- build:{target} [inline] {name} --> {} required [] optional
+        regexTagStart = /<!--\s*build:(\w+)\s*(inline)?\s*(optional)?\s*([^\s]*)\s*-->/, // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
         regexTagEnd = /<!--\s*\/build\s*-->/;  // <!-- /build -->
 
     //#endregion
 
     //#region Private Methods
 
-    function getBuildTags(body) {
-        var lines = body.replace(/\r\n/g, '\n').split(/\n/),
-			block = false,
-            blocks = [],
+    function getBuildTags(content) {
+        var lines = content.replace(/\r\n/g, '\n').split(/\n/),
+			tag = false,
+            tags = [],
 			last;
 
         lines.forEach(function (l) {
@@ -50,28 +57,29 @@ module.exports = function (grunt) {
 				tagEnd = regexTagEnd.test(l);
 
             if (tagStart) {
-                block = true;
-                last = { type: tagStart[1], inline: !!tagStart[2], name: tagStart[3], content: [] };
-                blocks.push(last);
+                tag = true;
+                last = { type: tagStart[1], inline: !!tagStart[2], optional: !!tagStart[3], name: tagStart[4], lines: [] };
+                tags.push(last);
             }
 
-            // switch back block flag when endbuild
-            if (block && tagEnd) {
-                last.content.push(l);
-                block = false;
+            // switch back tag flag when endbuild
+            if (tag && tagEnd) {
+                last.lines.push(l);
+                tag = false;
             }
 
-            if (block && last) {
-                last.content.push(l);
+            if (tag && last) {
+                last.lines.push(l);
             }
         });
 
-        return blocks;
+        return tags;
     }
-    function validateBlockWithName(block) {
-        return params[block.types + "s"][block.name];
+    function validateBlockWithName(tag, params) {
+        var src = params[tag.type + "s"][tag.name];
+        return src && grunt.file.expand({}, src);
     }
-    function validateBlockAlways(block) {
+    function validateBlockAlways(tag) {
         return true;
     }
 
@@ -79,34 +87,32 @@ module.exports = function (grunt) {
 
     //#region Processors Methods
 
-    function getIndentedFile(file, indent, eol) {
-        var content = grunt.file.read(file),
-            lines = content.replace(/\r\n/g, '\n').split(/\n/)
-                           .map(function (l) { return indent + l });
+    function createTemplateData(options, extend) {
+        return {
+            data: extend ?
+                    _.extend({}, options.data, extend) :
+                    options.data
+        };
+    }
+    function processTemplate(template, options, extend) {
+        return grunt.template.process(template, createTemplateData(options, extend));
+    }
+    function processHtmlTagTemplate(options, extend, inline) {
+        var template = templates[options.type + (inline ? "-inline" : "")];
+        return processTemplate(template, options, extend);
+    }
 
-        return lines.join(eol);
-    }
-    function createTemplateData(block, dest) {
-        return { data: _.extend({}, block.data, !!dest ? { dest: dest } : {}) };
-    }
-    function processTemplate(template, block, dest) {
-        return grunt.template.process(template, createTemplateData(block, dest));
-    }
-    function processTag(block) {
-        var indent = (block.content[0].match(/^\s*/) || [])[0],
-            files = grunt.file.expand(block.dest);
-
-        if (block.inline) {
-            var content = files.map(function (f) { return getIndentedFile(f, indent, block.eol); }).join(block.eol);
-            return processTemplate(templates[block.type + "-inline"], block, content);
+    function processHtmlTag(options) {
+        if (options.inline) {
+            var content = options.files.map(grunt.file.read).join(EOL);
+            return processHtmlTagTemplate(options, { content: content }, true);
         }
         else {
-            return files.map(function (f) {
-                return indent + processTemplate(templates[block.type], block, f);
-            }).join(block.eol);
+            return options.files.map(function (f) {
+                var url = path.relative(options.dest, f).replace(/\\/g, '/');
+                return processHtmlTagTemplate(options, { src: url });
+            }).join(EOL);
         }
-
-        return lines.join(block.eol);
     }
 
     //#endregion
@@ -115,10 +121,10 @@ module.exports = function (grunt) {
 
     var
         templates = {
-            'script': '<script type="text/javascript" src="<%= dest %>"></script>',
-            'style': '<link type="text/css" rel="stylesheet" href="<%= dest %>">',
-            'script-inline': '<style><%= dest %></style>',
-            'style-inline': '<script type="text/javascript"><%= dest %></script>'
+            'script': '<script type="text/javascript" src="<%= src %>"></script>',
+            'script-inline': '<script type="text/javascript"><%= content %></script>',
+            'style': '<link type="text/css" rel="stylesheet" href="<%= src %>" />',
+            'style-inline': '<style><%= content %></style>'
         },
         validators = {
             script: validateBlockWithName,
@@ -129,33 +135,31 @@ module.exports = function (grunt) {
             remove: validateBlockAlways,
 
             //base method
-            validate: function (block) {
-                return validators[block.type](block);
+            validate: function (tag, params) {
+                return validators[tag.type](tag, params);
             }
         },
         processors = {
-            script: processTag,
-            style: processTag,
-            section: function (block) {
-                var indent = (block.content[0].match(/^\s*/) || [])[0],
-                    files = grunt.file.expand(block.dest);
-
-                return files.map(function (f) { return getIndentedFile(f, indent, block.eol); }).join(block.eol);
+            script: processHtmlTag,
+            style: processHtmlTag,
+            section: function (options) {
+                return options.files.map(grunt.file.read).join(EOL);
             },
 
-            process: function (block) {
-                var indent = (block.content[0].match(/^\s*/) || [])[0],
-                    lines = block.content.map(function (l) { return indent + processTemplate(l, block); });
-
-                return lines.join(block.eol);
+            process: function (options) {
+                return options.lines
+                                .map(function (l) { return processTemplate(l, options); })
+                                .join(EOL)
+                                .replace(regexTagStart, "")
+                                .replace(regexTagEnd, "");
             },
-            remove: function (block) {
+            remove: function (options) {
                 return "";
             },
 
             //base method
-            transform: function (block) {
-                return processors[block.type](block);
+            transform: function (options) {
+                return processors[options.type](options);
             }
         };
 
@@ -164,36 +168,53 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('htmlbuild', "Grunt HTML Builder - Replace scripts and styles, Removes debug parts, append html partials, Template options", function () {
         var config = grunt.config(),
             params = this.options({
+                beautify: false,
+                logOptionals: false,
                 scripts: {},
                 styles: {},
                 sections: {},
                 data: {}
             });
 
+
         this.files.forEach(function (file) {
             var src = file.src[0], dest = file.dest,
+                destPath = dest ? path.join(dest, path.basename(src)) : src,
                 content = grunt.file.read(file.src[0]).toString(),
-                blocks = getBuildTags(content),
-                eol = /\r\n/g.test(content) ? '\r\n' : '\n'; // get EOL from content
+                tags = getBuildTags(content);
 
-            blocks.forEach(function (block) {
-                var raw = block.content.join(eol),
+            tags.forEach(function (tag) {
+                var raw = tag.lines.join(EOL),
                     result = "",
-                    destPath = validators.validate(block);
+                    tagFiles = validators.validate(tag, params);
 
-                if (!!destPath) {
-                    block.data = _.extend({}, config, params.data, { dest: destPath, eol: eol });
-                    result = processors.transform(block);
+                if (tagFiles) {
+                    var options = _.extend({}, tag, {
+                        data: _.extend({}, config, params.data),
+                        files: tagFiles,
+                        dest: dest
+                    });
+
+                    result = processors.transform(options);
                 }
-                //else 
-                //    grunt.log.error("Error while validating block { type: '', name: '' }, Name not found in task options, deleting block !");
+                else if (tag.optional) {
+                    if (params.logOptionals)
+                        grunt.log.error().error("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
+                }
+                else {
+                    grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
+                }
 
                 content = content.replace(raw, result);
             });
 
+            if (params.beautify) {
+                content = beautify.html(content, _.isObject(beautify) ? beautify : {});
+            }
+
             // write the contents to destination
-            var filePath = dest ? path.join(dest, path.basename(src)) : src;
-            grunt.file.write(filePath, content);
+            grunt.file.write(destPath, content);
+            grunt.log.writeln("File " + destPath + " created !");
         });
     });
 };

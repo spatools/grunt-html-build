@@ -16,31 +16,42 @@ grunt.loadNpmTasks('grunt-html-build');
 Then specify your config:
 
 ```javascript
-	grunt.initConfig({
-		htmlbuild: {
-			dist: {
-				src: './index.html',
-				dest: './dist/',
-				options: {
-					scripts: {
-						bundle: 'scripts/*.js',
-					},
-					styles: {
-						bundle: 'styles/*.css',
-						test: 'inline.css'
-					},
-					sections: {
-						views: 'views/**/*.html',
-						templates: 'templates/**/*.html',
-					},
-					data: {
-						version: "0.1.0",
-						test: "test",
-					},
-				}
-			}
-		}
-	});
+grunt.initConfig({
+    fixturesPath: "fixtures",
+
+    htmlbuild: {
+        dist: {
+            src: 'index.html',
+            dest: 'samples/',
+            options: {
+                beautify: true,
+                scripts: {
+                    bundle: [
+                        '<%= fixturesPath %>/scripts/*.js',
+                        '!**/main.js',
+                    ],
+                    main: '<%= fixturesPath %>/scripts/main.js'
+                },
+                styles: {
+                    bundle: [ 
+                        '<%= fixturesPath %>/css/libs.css',
+                        '<%= fixturesPath %>/css/dev.css'
+                    ],
+                    test: '<%= fixturesPath %>/css/inline.css'
+                },
+                sections: {
+                    views: '<%= fixturesPath %>/views/**/*.html',
+                    templates: '<%= fixturesPath %>/templates/**/*.html',
+                },
+                data: {
+					// Data to pass to templates
+                    version: "0.1.0",
+                    title: "test",
+                },
+            }
+        }
+    }
+});
 ```
 
 Using the configuration above, consider the following example html to see it in action:
@@ -71,8 +82,19 @@ Using the configuration above, consider the following example html to see it in 
     <script type="text/javascript" src="/path/to/js/app/module1.js"></script>
     <script type="text/javascript" src="/path/to/js/app/module2.js"></script>
     <!-- /build -->
+    <!-- build:process -->
+    <script type="text/javascript">
+        var version = "<%= version %>",
+            title = "<%= title %>";
+    </script>
+    <!-- /build -->
+    <!-- build:script inline main -->
+    <script type="text/javascript">
+        main();
+    </script>
+    <!-- /build -->
 
-    <!-- build:section templates -->
+    <!-- build:section optional test -->
     <!-- /build -->
 </body>
 </html>
@@ -81,29 +103,31 @@ Using the configuration above, consider the following example html to see it in 
 After running the grunt task it will be stored on the dist folder as
 
 ```html
-<!DOCTYPE html>
 <html>
-<head>
-    <title>grunt-html-build - Test Page</title>
-    <link rel="stylesheet" type="text/css" href="styles/libs.css" />
-    <link rel="stylesheet" type="text/css" href="styles/app.css" />
-    <style> ... CSS content from inline.css ... </style>
-</head>
-<body id="landing-page">
-    <div id="view1"> ... </div>
-    <div id="view2"> ... </div>
-    <div id="view3"> ... </div>
-	<!-- ... -->
-
-    <script type="text/javascript" src="scripts/libs.js"></script>
-    <script type="text/javascript" src="scripts/app.js"></script>
-    <script type="text/javascript" src="scripts/main.js"></script>
-
-    <script id="template1" type="text/html"> ... </script>
-    <script id="template2" type="text/html"> ... </script>
-    <script id="template3" type="text/html"> ... </script>
-	<!-- ... -->
-</body>
+    <head>
+        <title>grunt-html-build - Test Page</title>
+        <link type="text/css" rel="stylesheet" href="../fixtures/css/libs.css" />
+        <link type="text/css" rel="stylesheet" href="../fixtures/css/dev.css" />
+        <style>
+            .this-is-inline {
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body id="landing-page">
+        <div id="view1">...</div>
+        <div id="view2">...</div>
+        <div id="view3">...</div>
+        <script type="text/javascript" src="../fixtures/scripts/app.js"></script>
+        <script type="text/javascript" src="../fixtures/scripts/libs.js"></script>
+        <script type="text/javascript">
+            var version = "0.1.0",
+                title = "test";
+        </script>
+        <script type="text/javascript">
+            productionMain();
+        </script>
+    </body>
 </html>
 ```
 
