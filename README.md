@@ -145,12 +145,12 @@ There 5 types of processors:
 	* it will erase the whole block.
 
 [grunt]: https://github.com/gruntjs/grunt
-[doc-options]: https://github.com/spatoos/grunt-html-build/docs/options.md
-[doc-scripts-styles]: https://github.com/spatoos/grunt-html-build/docs/scripts_styles_link.md
-[doc-sections]: https://github.com/spatoos/grunt-html-build/docs/sections.md
-[doc-process]: https://github.com/spatoos/grunt-html-build/docs/process.md
-[doc-remove]: https://github.com/spatoos/grunt-html-build/docs/remove.md
-[doc-reuse]: https://github.com/spatoos/grunt-html-build/docs/reuse.md
+[doc-options]: https://github.com/spatools/grunt-html-build/docs/options.md
+[doc-scripts-styles]: https://github.com/spatools/grunt-html-build/docs/scripts_styles_link.md
+[doc-sections]: https://github.com/spatools/grunt-html-build/docs/sections.md
+[doc-process]: https://github.com/spatools/grunt-html-build/docs/process.md
+[doc-remove]: https://github.com/spatools/grunt-html-build/docs/remove.md
+[doc-reuse]: https://github.com/spatools/grunt-html-build/docs/reuse.md
 
 ## Release History
 * 0.1.0 Initial Release
