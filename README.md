@@ -13,7 +13,7 @@ Then add this line to your project's `Gruntfile.js` :
 grunt.loadNpmTasks('grunt-html-build');
 ```
 
-Then specify your config:
+Then specify your config: ([more informations][doc-options])
 
 ```javascript
 grunt.initConfig({
@@ -132,13 +132,27 @@ After running the grunt task it will be stored on the dist folder as
 ```
 
 There 5 types of processors: 
- * script    (append script reference from configuration to dest file)
- * style    (append style reference from configuration to dest file)
- * section    (append partials from configuration to dest file)    
- * process    (process grunt template on the block)   
- * remove    (it will erase the whole block).
+
+ * [script][doc-scripts-styles]
+	* append script reference from configuration to dest file.
+ * [style][doc-scripts-styles]
+	* append style reference from configuration to dest file.
+ * [section][doc-sections]
+	* append partials from configuration to dest file.
+ * [process][doc-process]
+	* process grunt template on the block.
+ * [remove][doc-reuse]
+	* it will erase the whole block.
 
 [grunt]: https://github.com/gruntjs/grunt
+[doc-options]: https://github.com/spatoos/grunt-html-build/docs/options.md
+[doc-scripts-styles]: https://github.com/spatoos/grunt-html-build/docs/scripts_styles_link.md
+[doc-sections]: https://github.com/spatoos/grunt-html-build/docs/sections.md
+[doc-process]: https://github.com/spatoos/grunt-html-build/docs/process.md
+[doc-remove]: https://github.com/spatoos/grunt-html-build/docs/remove.md
+[doc-reuse]: https://github.com/spatoos/grunt-html-build/docs/reuse.md
 
 ## Release History
 * 0.1.0 Initial Release
+* 0.1.1 Cleaning, adding optional tags, using js-beautify
+* 0.1.2 Adding expand options to tags paths and write docs

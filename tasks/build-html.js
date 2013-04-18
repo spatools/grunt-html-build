@@ -77,7 +77,19 @@ module.exports = function (grunt) {
     }
     function validateBlockWithName(tag, params) {
         var src = params[tag.type + "s"][tag.name];
-        return src && grunt.file.expand({}, src);
+        if (src) {
+            var opt = {},
+                files = src;
+
+            if (_.isObject(src)) {
+                opt = src;
+                files = src.files;
+
+                delete opt.files;
+            }
+            
+            return grunt.file.expand(opt, files);
+        }
     }
     function validateBlockAlways(tag) {
         return true;

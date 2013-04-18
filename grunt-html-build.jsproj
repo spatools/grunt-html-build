@@ -31,6 +31,11 @@
     </PackageCertificateKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="docs\process.md" />
+    <Content Include="docs\remove.md" />
+    <Content Include="docs\reuse.md" />
+    <Content Include="docs\scripts_styles_link.md" />
+    <Content Include="docs\sections.md" />
     <Content Include="docs\options.md" />
     <Content Include="Gruntfile.js" />
     <Content Include="index.html" />

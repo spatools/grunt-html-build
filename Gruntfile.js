@@ -16,10 +16,13 @@
                         main: '<%= fixturesPath %>/scripts/main.js'
                     },
                     styles: {
-                        bundle: [ 
-                            '<%= fixturesPath %>/css/libs.css',
-                            '<%= fixturesPath %>/css/dev.css'
-                        ],
+                        bundle: { 
+                            cwd: '<%= fixturesPath %>',
+                            files: [
+                                'css/libs.css',
+                                'css/dev.css'
+                            ]
+                        },
                         test: '<%= fixturesPath %>/css/inline.css'
                     },
                     sections: {
