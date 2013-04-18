@@ -156,3 +156,5 @@ There 5 types of processors:
 * 0.1.0 Initial Release
 * 0.1.1 Cleaning, adding optional tags, using js-beautify
 * 0.1.2 Adding expand options to tags paths and write docs
+* 0.1.3 Fixing nodejs dependencies
+* 0.1.4 Fixing nodejs dependencies
