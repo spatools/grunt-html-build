@@ -141,16 +141,16 @@ There 5 types of processors:
 	* append partials from configuration to dest file.
  * [process][doc-process]
 	* process grunt template on the block.
- * [remove][doc-reuse]
+ * [remove][doc-remove]
 	* it will erase the whole block.
 
 [grunt]: https://github.com/gruntjs/grunt
-[doc-options]: https://github.com/spatools/grunt-html-build/docs/options.md
-[doc-scripts-styles]: https://github.com/spatools/grunt-html-build/docs/scripts_styles_link.md
-[doc-sections]: https://github.com/spatools/grunt-html-build/docs/sections.md
-[doc-process]: https://github.com/spatools/grunt-html-build/docs/process.md
-[doc-remove]: https://github.com/spatools/grunt-html-build/docs/remove.md
-[doc-reuse]: https://github.com/spatools/grunt-html-build/docs/reuse.md
+[doc-options]: https://github.com/spatools/grunt-html-build/wiki/Task-Options
+[doc-scripts-styles]: https://github.com/spatools/grunt-html-build/wiki/Linking-Scripts-and-Styles
+[doc-sections]: https://github.com/spatools/grunt-html-build/wiki/Creating-HTML-Sections
+[doc-process]: https://github.com/spatools/grunt-html-build/wiki/Using-HTML-as-Template
+[doc-remove]: https://github.com/spatools/grunt-html-build/wiki/Removing-parts
+[doc-reuse]: https://github.com/spatools/grunt-html-build/wiki/Creating-reusable-HTML-Layout-Template
 
 ## Release History
 * 0.1.0 Initial Release
