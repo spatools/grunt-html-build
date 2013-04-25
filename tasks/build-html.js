@@ -48,13 +48,13 @@ module.exports = function (grunt) {
 
     function getBuildTags(content) {
         var lines = content.replace(/\r\n/g, '\n').split(/\n/),
-			tag = false,
+            tag = false,
             tags = [],
-			last;
+            last;
 
         lines.forEach(function (l) {
             var tagStart = l.match(regexTagStart),
-				tagEnd = regexTagEnd.test(l);
+                tagEnd = regexTagEnd.test(l);
 
             if (tagStart) {
                 tag = true;
@@ -188,45 +188,53 @@ module.exports = function (grunt) {
                 data: {}
             });
 
-
         this.files.forEach(function (file) {
-            var src = file.src[0], dest = file.dest,
-                destPath = dest ? path.join(dest, path.basename(src)) : src,
-                content = grunt.file.read(file.src[0]).toString(),
-                tags = getBuildTags(content);
 
-            tags.forEach(function (tag) {
-                var raw = tag.lines.join(EOL),
-                    result = "",
-                    tagFiles = validators.validate(tag, params);
+            var i = file.src.length - 1;
 
-                if (tagFiles) {
-                    var options = _.extend({}, tag, {
-                        data: _.extend({}, config, params.data),
-                        files: tagFiles,
-                        dest: dest
-                    });
+            for (i; i >= 0; i--) {
 
-                    result = processors.transform(options);
+                var src = file.src[i],
+                    dest = file.dest,
+                    destPath = dest ? path.join(dest, path.basename(src)) : src,
+                    content = grunt.file.read(file.src[i]).toString(),
+                    tags = getBuildTags(content);
+
+                tags.forEach(function (tag) {
+                    var raw = tag.lines.join(EOL),
+                        result = "",
+                        tagFiles = validators.validate(tag, params);
+
+                    if (tagFiles) {
+                        var options = _.extend({}, tag, {
+                            data: _.extend({}, config, params.data),
+                            files: tagFiles,
+                            dest: dest
+                        });
+
+                        result = processors.transform(options);
+                    }
+                    else if (tag.optional) {
+                        if (params.logOptionals)
+                            grunt.log.error().error("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
+                    }
+                    else {
+                        grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
+                    }
+
+                    content = content.replace(raw, result);
+                });
+
+                if (params.beautify) {
+                    content = beautify.html(content, _.isObject(beautify) ? beautify : {});
                 }
-                else if (tag.optional) {
-                    if (params.logOptionals)
-                        grunt.log.error().error("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
-                }
-                else {
-                    grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
-                }
 
-                content = content.replace(raw, result);
-            });
+                // write the contents to destination
+                grunt.file.write(destPath, content);
+                grunt.log.writeln("File " + destPath + " created !");
 
-            if (params.beautify) {
-                content = beautify.html(content, _.isObject(beautify) ? beautify : {});
-            }
+            };
 
-            // write the contents to destination
-            grunt.file.write(destPath, content);
-            grunt.log.writeln("File " + destPath + " created !");
         });
     });
 };
