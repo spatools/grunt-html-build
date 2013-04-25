@@ -189,16 +189,13 @@ module.exports = function (grunt) {
             });
 
         this.files.forEach(function (file) {
+            var dest = file.dest || "",
+                destPath, content, tags;
 
-            var i = file.src.length - 1;
-
-            for (i; i >= 0; i--) {
-
-                var src = file.src[i],
-                    dest = file.dest,
-                    destPath = dest ? path.join(dest, path.basename(src)) : src,
-                    content = grunt.file.read(file.src[i]).toString(),
-                    tags = getBuildTags(content);
+            file.src.forEach(function (src) {
+                destPath = path.join(dest, path.basename(src));
+                content = grunt.file.read(src).toString();
+                tags = getBuildTags(content);
 
                 tags.forEach(function (tag) {
                     var raw = tag.lines.join(EOL),
@@ -226,15 +223,13 @@ module.exports = function (grunt) {
                 });
 
                 if (params.beautify) {
-                    content = beautify.html(content, _.isObject(beautify) ? beautify : {});
+                    content = beautify.html(content, _.isObject(params.beautify) ? params.beautify : {});
                 }
 
                 // write the contents to destination
                 grunt.file.write(destPath, content);
                 grunt.log.writeln("File " + destPath + " created !");
-
-            };
-
+            });
         });
     });
 };
