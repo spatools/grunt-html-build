@@ -8,7 +8,7 @@
                 dest: './samples/',
                 options: {
                     beautify: true,
-                    parseTag: 'htmlbuild',
+                    //parseTag: 'htmlbuild',
                     scripts: {
                         bundle: [
                             '<%= fixturesPath %>/scripts/*.js',
