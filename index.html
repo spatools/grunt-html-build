@@ -1,41 +1,41 @@
 ﻿<html>
 <head>
     <title>grunt-html-build - Test Page</title>
-    <!-- build:style bundle -->
+    <!-- htmlbuild:style bundle -->
     <link rel="stylesheet" type="text/css" href="/path/to/css/dev.css" />
-    <!-- /build -->
-    <!-- build:style inline test -->
+    <!-- /htmlbuild -->
+    <!-- htmlbuild:style inline test -->
     <link rel="stylesheet" type="text/css" href="/path/to/css/dev-inline.css" />
-    <!-- /build -->
+    <!-- /htmlbuild -->
 </head>
 <body id="landing-page">
-    <!-- build:section views -->
-    <!-- /build -->
+    <!-- htmlbuild:section views -->
+    <!-- /htmlbuild -->
 
-    <!-- build:remove -->
+    <!-- htmlbuild:remove -->
     <script type="text/javascript" src="/path/to/js/only-dev.js"></script>
-    <!-- /build -->
+    <!-- /htmlbuild -->
 
-    <!-- build:script bundle -->
+    <!-- htmlbuild:script bundle -->
     <script type="text/javascript" src="/path/to/js/libs/jquery.js"></script>
     <script type="text/javascript" src="/path/to/js/libs/knockout.js"></script>
     <script type="text/javascript" src="/path/to/js/libs/underscore.js"></script>
     <script type="text/javascript" src="/path/to/js/app/module1.js"></script>
     <script type="text/javascript" src="/path/to/js/app/module2.js"></script>
-    <!-- /build -->
-    <!-- build:process -->
+    <!-- /htmlbuild -->
+    <!-- htmlbuild:process -->
     <script type="text/javascript">
         var version = "<%= version %>",
             title = "<%= title %>";
     </script>
-    <!-- /build -->
-    <!-- build:script inline main -->
+    <!-- /htmlbuild -->
+    <!-- htmlbuild:script inline main -->
     <script type="text/javascript">
         main();
     </script>
-    <!-- /build -->
+    <!-- /htmlbuild -->
 
-    <!-- build:section optional test -->
-    <!-- /build -->
+    <!-- htmlbuild:section optional test -->
+    <!-- /htmlbuild -->
 </body>
 </html>
