@@ -39,8 +39,8 @@ module.exports = function (grunt) {
         },
 
         // Tags Regular Expressions
-        regexTagStart = /<!--\s*htmlbuild:(\w+)\s*(inline)?\s*(optional)?\s*([^\s]*)\s*-->/, // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
-        regexTagEnd = /<!--\s*\/htmlbuild\s*-->/;  // <!-- /build -->
+        regexTagStart = /<!--\s*build:(\w+)\s*(inline)?\s*(optional)?\s*([^\s]*)\s*-->/, // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
+        regexTagEnd = /<!--\s*\/build\s*-->/;  // <!-- /build -->
 
     //#endregion
 
