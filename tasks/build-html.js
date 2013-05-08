@@ -203,7 +203,7 @@ module.exports = function (grunt) {
             file.src.forEach(function (src) {
                 destPath = path.join(dest, path.basename(src));
                 content = grunt.file.read(src).toString();
-                tags = getBuildTags(content, params.parseTag);
+                tags = getBuildTags(content);
 
                 tags.forEach(function (tag) {
                     var raw = tag.lines.join(EOL),
