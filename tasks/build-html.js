@@ -39,8 +39,8 @@ module.exports = function (grunt) {
         },
 
         // Tags Regular Expressions
-        regexTagStart = /<!--\s*build:(\w+)\s*(inline)?\s*(optional)?\s*([^\s]*)\s*-->/, // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
-        regexTagEnd = /<!--\s*\/build\s*-->/;  // <!-- /build -->
+        regexTagStart = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
+        regexTagEnd = "<!--\\s*\\/%parseTag%\\s*-->";  // <!-- /build -->
 
     //#endregion
 
@@ -53,8 +53,8 @@ module.exports = function (grunt) {
             last;
 
         lines.forEach(function (l) {
-            var tagStart = l.match(regexTagStart),
-                tagEnd = regexTagEnd.test(l);
+            var tagStart = l.match(new RegExp(regexTagStart)),
+                tagEnd = new RegExp(regexTagEnd).test(l);
 
             if (tagStart) {
                 tag = true;
@@ -93,6 +93,11 @@ module.exports = function (grunt) {
     }
     function validateBlockAlways(tag) {
         return true;
+    }
+
+    function setTagRegexes(parseTag) {
+        regexTagStart = regexTagStart.replace(/%parseTag%/, parseTag);
+        regexTagEnd = regexTagEnd.replace(/%parseTag%/, parseTag);
     }
 
     //#endregion
@@ -162,8 +167,8 @@ module.exports = function (grunt) {
                 return options.lines
                                 .map(function (l) { return processTemplate(l, options); })
                                 .join(EOL)
-                                .replace(regexTagStart, "")
-                                .replace(regexTagEnd, "");
+                                .replace(new RegExp(regexTagStart), "")
+                                .replace(new RegExp(regexTagEnd), "");
             },
             remove: function (options) {
                 return "";
@@ -185,8 +190,11 @@ module.exports = function (grunt) {
                 scripts: {},
                 styles: {},
                 sections: {},
-                data: {}
+                data: {},
+                parseTag: 'build'
             });
+
+        setTagRegexes(params.parseTag);
 
         this.files.forEach(function (file) {
             var dest = file.dest || "",
