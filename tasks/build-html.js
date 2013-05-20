@@ -105,10 +105,9 @@ module.exports = function (grunt) {
     //#region Processors Methods
 
     function createTemplateData(options, extend) {
+        value = extend ? _.extend({}, options.data, extend) : options.data
         return {
-            data: extend ?
-                    _.extend({}, options.data, extend) :
-                    options.data
+            data: value
         };
     }
     function processTemplate(template, options, extend) {
@@ -120,6 +119,7 @@ module.exports = function (grunt) {
     }
 
     function processHtmlTag(options) {
+        console.log(options)
         if (options.inline) {
             var content = options.files.map(grunt.file.read).join(EOL);
             return processHtmlTagTemplate(options, { content: content }, true);
@@ -127,6 +127,10 @@ module.exports = function (grunt) {
         else {
             return options.files.map(function (f) {
                 var url = path.relative(options.dest, f).replace(/\\/g, '/');
+                if (options.prefix) {
+                  url = path.join(options.prefix, url);
+                }
+                console.log(url);
                 return processHtmlTagTemplate(options, { src: url });
             }).join(EOL);
         }
@@ -218,7 +222,8 @@ module.exports = function (grunt) {
                         var options = _.extend({}, tag, {
                             data: _.extend({}, config, params.data),
                             files: tagFiles,
-                            dest: dest
+                            dest: dest,
+                            prefix: params.prefix
                         });
 
                         result = processors.transform(options);
