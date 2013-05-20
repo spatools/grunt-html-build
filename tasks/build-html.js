@@ -119,7 +119,6 @@ module.exports = function (grunt) {
     }
 
     function processHtmlTag(options) {
-        console.log(options)
         if (options.inline) {
             var content = options.files.map(grunt.file.read).join(EOL);
             return processHtmlTagTemplate(options, { content: content }, true);
@@ -130,7 +129,6 @@ module.exports = function (grunt) {
                 if (options.prefix) {
                   url = path.join(options.prefix, url);
                 }
-                console.log(url);
                 return processHtmlTagTemplate(options, { src: url });
             }).join(EOL);
         }
