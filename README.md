@@ -25,6 +25,7 @@ grunt.initConfig({
             dest: 'samples/',
             options: {
                 beautify: true,
+                prefix: '//some-cdn'
                 scripts: {
                     bundle: [
                         '<%= fixturesPath %>/scripts/*.js',
@@ -33,7 +34,7 @@ grunt.initConfig({
                     main: '<%= fixturesPath %>/scripts/main.js'
                 },
                 styles: {
-                    bundle: [ 
+                    bundle: [
                         '<%= fixturesPath %>/css/libs.css',
                         '<%= fixturesPath %>/css/dev.css'
                     ],
@@ -131,7 +132,7 @@ After running the grunt task it will be stored on the dist folder as
 </html>
 ```
 
-There 5 types of processors: 
+There 5 types of processors:
 
  * [script][doc-scripts-styles]
 	* append script reference from configuration to dest file.
