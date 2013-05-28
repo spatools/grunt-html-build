@@ -201,7 +201,7 @@ module.exports = function (grunt) {
                 destPath, content, tags;
 
             file.src.forEach(function (src) {
-                destPath = path.join(dest, path.basename(src));
+                destPath = /\.(\w+){2,4}$/.test(dest) ? dest : path.join(dest, path.basename(src));
                 content = grunt.file.read(src).toString();
                 tags = getBuildTags(content);
 
