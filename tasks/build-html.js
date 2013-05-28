@@ -87,7 +87,7 @@ module.exports = function (grunt) {
 
                 delete opt.files;
             }
-            
+
             return grunt.file.expand(opt, files);
         }
     }
@@ -96,8 +96,8 @@ module.exports = function (grunt) {
     }
 
     function setTagRegexes(parseTag) {
-        regexTagStart = regexTagStart.replace(/%parseTag%/, parseTag);
-        regexTagEnd = regexTagEnd.replace(/%parseTag%/, parseTag);
+        regexTagStart = regexTagStart.replace(/%parseTag%/, function (){return parseTag});
+        regexTagEnd = regexTagEnd.replace(/%parseTag%/, function (){return parseTag});
     }
 
     //#endregion
@@ -227,7 +227,7 @@ module.exports = function (grunt) {
                         grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
                     }
 
-                    content = content.replace(raw, result);
+                    content = content.replace(raw, function (){return result});
                 });
 
                 if (params.beautify) {
