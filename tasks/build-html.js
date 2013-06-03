@@ -106,9 +106,8 @@ module.exports = function (grunt) {
     //#region Processors Methods
 
     function createTemplateData(options, extend) {
-        value = extend ? _.extend({}, options.data, extend) : options.data
         return {
-            data: value
+            data: extend ? _.extend({}, options.data, extend) : options.data
         };
     }
     function processTemplate(template, options, extend) {
@@ -249,7 +248,7 @@ module.exports = function (grunt) {
 
                 // write the contents to destination
                 grunt.file.write(destPath, content);
-                grunt.log.writeln("File " + destPath + " created !");
+                grunt.log.ok("File " + destPath + " created !");
             });
         });
     });

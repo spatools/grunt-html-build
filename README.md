@@ -161,3 +161,8 @@ There 5 types of processors:
 * 0.1.4 Fixing nodejs dependencies
 * 0.1.5 Optimize src loop / Fix js-beautify options
 * 0.1.6 Allow build tag customization
+* 0.2.0 
+	* Fix and optimisation
+	* Allow replacing src file by built file
+	* Allow filename in dest path
+	* Allow prefixing src files
