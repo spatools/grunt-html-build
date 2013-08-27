@@ -39,9 +39,11 @@ module.exports = function (grunt) {
         },
 
         // Tags Regular Expressions
-        regexTagStart = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
-        regexTagEnd = "<!--\\s*\\/%parseTag%\\s*-->",
-        isFileRegex = /\.(\w+){2,4}$/;  // <!-- /build -->
+        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
+        regexTagEndTemplate = "<!--\\s*\\/%parseTag%\\s*-->", // <!-- /build -->
+        regexTagStart = "",
+        regexTagEnd = "",
+        isFileRegex = /\.(\w+){2,4}$/;
 
     //#endregion
 
@@ -97,8 +99,8 @@ module.exports = function (grunt) {
     }
 
     function setTagRegexes(parseTag) {
-        regexTagStart = regexTagStart.replace(/%parseTag%/, function () { return parseTag });
-        regexTagEnd = regexTagEnd.replace(/%parseTag%/, function () { return parseTag });
+        regexTagStart = regexTagStartTemplate.replace(/%parseTag%/, function () { return parseTag });
+        regexTagEnd = regexTagEndTemplate.replace(/%parseTag%/, function () { return parseTag });
     }
 
     //#endregion
