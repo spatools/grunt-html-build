@@ -25,7 +25,8 @@ grunt.initConfig({
             dest: 'samples/',
             options: {
                 beautify: true,
-                prefix: '//some-cdn'
+                prefix: '//some-cdn',
+				relative: true,
                 scripts: {
                     bundle: [
                         '<%= fixturesPath %>/scripts/*.js',
@@ -166,3 +167,4 @@ There 5 types of processors:
 	* Allow replacing src file by built file
 	* Allow filename in dest path
 	* Allow prefixing src files
+* 0.2.1 Allow non relative file names + per file tag parameter

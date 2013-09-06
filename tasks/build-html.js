@@ -126,10 +126,14 @@ module.exports = function (grunt) {
             return processHtmlTagTemplate(options, { content: content }, true);
         }
         else {
-            return options.files.map(function (url) {
+            return options.files.map(function (f) {
+                var url = options.relative ? path.relative(options.dest, f) : f;
+                url = url.replace(/\\/g, '/');
+
                 if (options.prefix) {
                     url = path.join(options.prefix, url);
                 }
+
                 return processHtmlTagTemplate(options, { src: url });
             }).join(EOL);
         }
@@ -190,6 +194,7 @@ module.exports = function (grunt) {
             params = this.options({
                 beautify: false,
                 logOptionals: false,
+                relative: true,
                 scripts: {},
                 styles: {},
                 sections: {},
