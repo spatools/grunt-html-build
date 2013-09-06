@@ -126,10 +126,9 @@ module.exports = function (grunt) {
             return processHtmlTagTemplate(options, { content: content }, true);
         }
         else {
-            return options.files.map(function (f) {
-                var url = path.relative(options.dest, f).replace(/\\/g, '/');
+            return options.files.map(function (url) {
                 if (options.prefix) {
-                  url = path.join(options.prefix, url);
+                    url = path.join(options.prefix, url);
                 }
                 return processHtmlTagTemplate(options, { src: url });
             }).join(EOL);
