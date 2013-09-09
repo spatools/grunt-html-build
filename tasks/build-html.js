@@ -232,7 +232,7 @@ module.exports = function (grunt) {
                             data: _.extend({}, config, params.data),
                             files: tagFiles,
                             dest: dest,
-                            prefix: params.prefix,,
+                            prefix: params.prefix,
                             relative: params.relative
                         });
 
