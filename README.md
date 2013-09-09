@@ -168,3 +168,4 @@ There 5 types of processors:
 	* Allow filename in dest path
 	* Allow prefixing src files
 * 0.2.1 Allow non relative file names + per file tag parameter
+* 0.2.2 Fix issue in options.relative
