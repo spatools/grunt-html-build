@@ -84,7 +84,7 @@ module.exports = function (grunt) {
 	var keys = tag.name.split(".");
 	var ln = keys.length;
 
-	for(var i=0; i < ln; i++){ src = src[keys[i]]; }	// Search target
+	for(var i=0; i < ln; i++) { src = src[keys[i]]; }	// Search target
 
         if (src) {
             var opt = {},
@@ -92,7 +92,14 @@ module.exports = function (grunt) {
 
             if (_.isObject(src)) {
                 opt = src;
-                files = src.files;
+		if(src.files){
+         		files = src.files;
+		}else{
+			files = [];
+			for (var key in src) {
+				files.push(src[key]);
+			}
+		}
 
                 delete opt.files;
             }
