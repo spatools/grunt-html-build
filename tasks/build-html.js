@@ -79,7 +79,13 @@ module.exports = function (grunt) {
         return tags;
     }
     function validateBlockWithName(tag, params) {
-        var src = params[tag.type + "s"][tag.name];
+        var src = params[tag.type + "s"];
+	
+	var keys = tag.name.split(".");
+	var ln = keys.length;
+
+	for(var i=0; i < ln; i++){ src = src[keys[i]]; }	// Search target
+
         if (src) {
             var opt = {},
                 files = src;
