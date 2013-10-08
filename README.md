@@ -44,6 +44,10 @@ grunt.initConfig({
                 sections: {
                     views: '<%= fixturesPath %>/views/**/*.html',
                     templates: '<%= fixturesPath %>/templates/**/*.html',
+					layout: {
+						header: '<%= fixturesPath %>/layout/header.html',
+						footer: '<%= fixturesPath %>/layout/footer.html'
+					}
                 },
                 data: {
 					// Data to pass to templates
@@ -70,8 +74,14 @@ Using the configuration above, consider the following example html to see it in 
     <!-- /build -->
 </head>
 <body id="landing-page">
+	<!-- build:section layout.header -->
+	<!-- /build -->
+
     <!-- build:section views -->
     <!-- /build -->
+
+	<!-- build:section layout.footer -->
+	<!-- /build -->
 
     <!-- build:remove -->
     <script type="text/javascript" src="/path/to/js/only-dev.js"></script>
@@ -117,9 +127,11 @@ After running the grunt task it will be stored on the dist folder as
         </style>
     </head>
     <body id="landing-page">
+		<header>...</header>
         <div id="view1">...</div>
         <div id="view2">...</div>
         <div id="view3">...</div>
+		<footer>...</footer>
         <script type="text/javascript" src="../fixtures/scripts/app.js"></script>
         <script type="text/javascript" src="../fixtures/scripts/libs.js"></script>
         <script type="text/javascript">
@@ -169,3 +181,6 @@ There 5 types of processors:
 	* Allow prefixing src files
 * 0.2.1 Allow non relative file names + per file tag parameter
 * 0.2.2 Fix issue in options.relative
+* 0.3.0
+	* Fix issue when building multiple html files using custom file globbing
+	* Allow sub parameters in all options paths
