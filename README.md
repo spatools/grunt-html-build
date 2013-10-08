@@ -1,5 +1,4 @@
-grunt-html-build
-================
+# grunt-html-build [![NPM version](https://badge.fury.io/js/grunt-html-build.png)](http://badge.fury.io/js/grunt-html-build)
 
 [Grunt][grunt] HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options
 
