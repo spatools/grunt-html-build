@@ -79,31 +79,30 @@ module.exports = function (grunt) {
         return tags;
     }
     function validateBlockWithName(tag, params) {
-        var src = params[tag.type + "s"];
-	
-	var keys = tag.name.split(".");
-	var ln = keys.length;
+        var src = params[tag.type + "s"],
 
-	for(var i=0; i < ln; i++) { src = src[keys[i]]; }	// Search target
+            keys = tag.name.split("."),
+            ln = keys.length;
+
+        for (var i = 0; i < ln; i++) {
+            src = src[keys[i]]; // Search target
+        }
 
         if (src) {
             var opt = {},
                 files = src;
 
             if (_.isObject(src)) {
-                opt = src;
-		if(src.files){
-         		files = src.files;
-		}else{
-			files = [];
-			for (var key in src) {
-				files.push(src[key]);
-			}
-		}
-
-                delete opt.files;
+                if (src.files) {
+                    opt = _.omit(src, "files");
+                    files = src.files;
+                }
+                else {
+                    // if paths are named, just take values
+                    files = _.values(src); 
+                }
             }
-            
+
             return grunt.file.expand(opt, files);
         }
     }
