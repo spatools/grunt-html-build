@@ -140,11 +140,12 @@ module.exports = function (grunt) {
         else {
             return options.files.map(function (f) {
                 var url = options.relative ? path.relative(options.dest, f) : f;
-                url = url.replace(/\\/g, '/');
 
                 if (options.prefix) {
                     url = path.join(options.prefix, url);
                 }
+                
+                url = url.replace(/\\/g, '/');
 
                 return processHtmlTagTemplate(options, { src: url });
             }).join(EOL);
