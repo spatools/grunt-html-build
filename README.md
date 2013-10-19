@@ -183,3 +183,5 @@ There 5 types of processors:
 * 0.3.0
 	* Fix issue when building multiple html files using custom file globbing
 	* Allow sub parameters in all options paths
+* 0.3.1
+	* Fix issue when using prefix on Windows environment
