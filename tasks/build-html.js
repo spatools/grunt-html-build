@@ -39,7 +39,7 @@ module.exports = function (grunt) {
         },
 
         // Tags Regular Expressions
-        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
+        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*([^\\s]*)\\s*(\\[(.*)\\])?.* -->", // <!-- build:{type} [inline] [optional] {name} [ attributes... ] --> {} required [] optional
         regexTagEndTemplate = "<!--\\s*\\/%parseTag%\\s*-->", // <!-- /build -->
         regexTagStart = "",
         regexTagEnd = "",
@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 
             if (tagStart) {
                 tag = true;
-                last = { type: tagStart[1], inline: !!tagStart[2], optional: !!tagStart[3], name: tagStart[4], lines: [] };
+                last = { type: tagStart[1], inline: !!tagStart[2], optional: !!tagStart[3], name: tagStart[4], lines: [], _attributes_: tagStart[6] };
                 tags.push(last);
             }
 
@@ -121,7 +121,7 @@ module.exports = function (grunt) {
 
     function createTemplateData(options, extend) {
         return {
-            data: extend ? _.extend({}, options.data, extend) : options.data
+            data: extend ? _.extend({}, options, options.data, extend) : options.data
         };
     }
     function processTemplate(template, options, extend) {
@@ -158,10 +158,10 @@ module.exports = function (grunt) {
 
     var
         templates = {
-            'script': '<script type="text/javascript" src="<%= src %>"></script>',
-            'script-inline': '<script type="text/javascript"><%= content %></script>',
-            'style': '<link type="text/css" rel="stylesheet" href="<%= src %>" />',
-            'style-inline': '<style><%= content %></style>'
+            'script':           '<script <%= _attributes_ %> type="text/javascript" src="<%= src %>"></script>',
+            'script-inline':    '<script <%= _attributes_ %> type="text/javascript"><%= content %></script>',
+            'style':            '<link <%= _attributes_ %> type="text/css" rel="stylesheet" href="<%= src %>" />',
+            'style-inline':     '<style <%= _attributes_ %>><%= content %></style>'
         },
         validators = {
             script: validateBlockWithName,
