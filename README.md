@@ -185,3 +185,6 @@ There 5 types of processors:
 	* Allow sub parameters in all options paths
 * 0.3.1
 	* Fix issue when using prefix on Windows environment
+* 0.3.2
+	* Update js-beautify dependency to 1.4.2
+	* Remove peerDependencies to avoid versions conflict
