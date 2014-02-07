@@ -18,10 +18,6 @@
     "grunt": "~0.4.1",
     "js-beautify": "~1.4.2"
   },
-  "peerDependencies": {
-    "grunt": "0.4.x",
-    "js-beautify": "~1.4.2"
-  },
   "dependencies": {
 	"grunt": "0.4.x",
     "js-beautify": "~1.4.2"
