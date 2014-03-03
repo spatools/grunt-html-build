@@ -102,8 +102,12 @@ module.exports = function (grunt) {
                     files = _.values(src); 
                 }
             }
-
-            return grunt.file.expand(opt, files);
+            if(typeof files !== "object") files = [files];
+            var local = grunt.file.expand(opt, files),
+                remote = _.map(files, path.normalize).filter(function(path) { //for loading from cdn
+                    return /^((http|https):)?(\\|\/\/)/.test(path); //is http, https, or //
+                });
+            return _.uniq(local.concat(remote));
         }
     }
     function validateBlockAlways(tag) {

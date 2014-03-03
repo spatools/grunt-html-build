@@ -14,6 +14,10 @@
                             '<%= fixturesPath %>/scripts/*.js',
                             '!**/main.js',
                         ],
+                        bundle_remote: [
+                            "//cdn.jsdelivr.net/jquery/2.1.0/jquery.js",
+                            "//cdn.jsdelivr.net/bootstrap/3.1.1/js/bootstrap.min.js"
+                        ],
                         main: '<%= fixturesPath %>/scripts/main.js'
                     },
                     styles: {
