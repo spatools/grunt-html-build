@@ -78,6 +78,13 @@ module.exports = function (grunt) {
 
         return tags;
     }
+    function defaultProcessPath(pathes, opt) { //takes an array of paths and validates them
+        var local = grunt.file.expand(opt, pathes),
+            remote = _.map(pathes, path.normalize).filter(function(path) { //for loading from cdn
+                return /^((http|https):)?(\\|\/\/)/.test(path); //is http, https, or //
+            });
+        return _.uniq(local.concat(remote));
+    }
     function validateBlockWithName(tag, params) {
         var src = params[tag.type + "s"],
 
@@ -103,11 +110,7 @@ module.exports = function (grunt) {
                 }
             }
             if(typeof files !== "object") files = [files];
-            var local = grunt.file.expand(opt, files),
-                remote = _.map(files, path.normalize).filter(function(path) { //for loading from cdn
-                    return /^((http|https):)?(\\|\/\/)/.test(path); //is http, https, or //
-                });
-            return _.uniq(local.concat(remote));
+            return params.processPath(files, opt);
         }
     }
     function validateBlockAlways(tag) {
@@ -216,7 +219,9 @@ module.exports = function (grunt) {
                 styles: {},
                 sections: {},
                 data: {},
-                parseTag: 'build'
+                parseTag: 'build',
+                
+                processPath: defaultProcessPath
             });
 
         setTagRegexes(params.parseTag);
