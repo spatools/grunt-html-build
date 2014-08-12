@@ -195,6 +195,12 @@ module.exports = function (grunt) {
                                 .replace(new RegExp(regexTagEnd), "");
             },
             remove: function (options) {
+                if (!options.name) return "";
+
+                if (options.name.replace(':', '').split(',').indexOf(grunt.task.current.target) < 0){
+                    return options.lines.join(EOL).replace(new RegExp(regexTagStart), "").replace(new RegExp(regexTagEnd), "");
+                }
+
                 return "";
             },
 
