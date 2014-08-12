@@ -85,6 +85,10 @@ Using the configuration above, consider the following example html to see it in 
     <!-- build:remove -->
     <script type="text/javascript" src="/path/to/js/only-dev.js"></script>
     <!-- /build -->
+    
+    <!-- build:remove:dev -->
+    <script type="text/javascript" src="/path/to/js/analytics.js"></script>
+    <!-- /build -->
 
     <!-- build:script bundle -->
     <script type="text/javascript" src="/path/to/js/libs/jquery.js"></script>
