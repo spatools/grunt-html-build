@@ -30,6 +30,7 @@ module.exports = function (grunt) {
     var // Init 
         _ = grunt.util._,
         EOL = grunt.util.linefeed,
+        URL = require('url'),
         path = require('path'),
         beautifier = require('js-beautify'),
         beautify = {
@@ -140,12 +141,12 @@ module.exports = function (grunt) {
         else {
             return options.files.map(function (f) {
                 var url = options.relative ? path.relative(options.dest, f) : f;
-
-                if (options.prefix) {
-                    url = path.join(options.prefix, url);
-                }
                 
                 url = url.replace(/\\/g, '/');
+
+                if (options.prefix) {
+                    url = URL.resolve(options.prefix.replace(/\\/g, '/'), url);
+                }
 
                 return processHtmlTagTemplate(options, { src: url });
             }).join(EOL);
