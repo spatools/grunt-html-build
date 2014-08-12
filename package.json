@@ -19,7 +19,7 @@
     "js-beautify": "~1.4.2"
   },
   "dependencies": {
-	"grunt": "0.4.x",
+    "grunt": "0.4.x",
     "js-beautify": "~1.4.2"
   },
   "keywords": [
