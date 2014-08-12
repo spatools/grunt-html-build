@@ -25,7 +25,7 @@ grunt.initConfig({
             options: {
                 beautify: true,
                 prefix: '//some-cdn',
-				relative: true,
+                relative: true,
                 scripts: {
                     bundle: [
                         '<%= fixturesPath %>/scripts/*.js',
@@ -43,13 +43,13 @@ grunt.initConfig({
                 sections: {
                     views: '<%= fixturesPath %>/views/**/*.html',
                     templates: '<%= fixturesPath %>/templates/**/*.html',
-					layout: {
-						header: '<%= fixturesPath %>/layout/header.html',
-						footer: '<%= fixturesPath %>/layout/footer.html'
-					}
+                    layout: {
+                        header: '<%= fixturesPath %>/layout/header.html',
+                        footer: '<%= fixturesPath %>/layout/footer.html'
+                    }
                 },
                 data: {
-					// Data to pass to templates
+                    // Data to pass to templates
                     version: "0.1.0",
                     title: "test",
                 },
@@ -73,14 +73,14 @@ Using the configuration above, consider the following example html to see it in 
     <!-- /build -->
 </head>
 <body id="landing-page">
-	<!-- build:section layout.header -->
-	<!-- /build -->
+    <!-- build:section layout.header -->
+    <!-- /build -->
 
     <!-- build:section views -->
     <!-- /build -->
 
-	<!-- build:section layout.footer -->
-	<!-- /build -->
+    <!-- build:section layout.footer -->
+    <!-- /build -->
 
     <!-- build:remove -->
     <script type="text/javascript" src="/path/to/js/only-dev.js"></script>
@@ -126,11 +126,11 @@ After running the grunt task it will be stored on the dist folder as
         </style>
     </head>
     <body id="landing-page">
-		<header>...</header>
+        <header>...</header>
         <div id="view1">...</div>
         <div id="view2">...</div>
         <div id="view3">...</div>
-		<footer>...</footer>
+        <footer>...</footer>
         <script type="text/javascript" src="../fixtures/scripts/app.js"></script>
         <script type="text/javascript" src="../fixtures/scripts/libs.js"></script>
         <script type="text/javascript">
@@ -147,15 +147,15 @@ After running the grunt task it will be stored on the dist folder as
 There 5 types of processors:
 
  * [script][doc-scripts-styles]
-	* append script reference from configuration to dest file.
+    * append script reference from configuration to dest file.
  * [style][doc-scripts-styles]
-	* append style reference from configuration to dest file.
+    * append style reference from configuration to dest file.
  * [section][doc-sections]
-	* append partials from configuration to dest file.
+    * append partials from configuration to dest file.
  * [process][doc-process]
-	* process grunt template on the block.
+    * process grunt template on the block.
  * [remove][doc-remove]
-	* it will erase the whole block.
+    * it will erase the whole block.
 
 [grunt]: https://github.com/gruntjs/grunt
 [doc-options]: https://github.com/spatools/grunt-html-build/wiki/Task-Options
@@ -174,17 +174,20 @@ There 5 types of processors:
 * 0.1.5 Optimize src loop / Fix js-beautify options
 * 0.1.6 Allow build tag customization
 * 0.2.0 
-	* Fix and optimisation
-	* Allow replacing src file by built file
-	* Allow filename in dest path
-	* Allow prefixing src files
+    * Fix and optimisation
+    * Allow replacing src file by built file
+    * Allow filename in dest path
+    * Allow prefixing src files
 * 0.2.1 Allow non relative file names + per file tag parameter
 * 0.2.2 Fix issue in options.relative
 * 0.3.0
-	* Fix issue when building multiple html files using custom file globbing
-	* Allow sub parameters in all options paths
+    * Fix issue when building multiple html files using custom file globbing
+    * Allow sub parameters in all options paths
 * 0.3.1
-	* Fix issue when using prefix on Windows environment
+    * Fix issue when using prefix on Windows environment
 * 0.3.2
-	* Update js-beautify dependency to 1.4.2
-	* Remove peerDependencies to avoid versions conflict
+    * Update js-beautify dependency to 1.4.2
+    * Remove peerDependencies to avoid versions conflict
+* 0.4.0
+    * Fix bug in prefix option
+    * Allow recursive build using section processor
