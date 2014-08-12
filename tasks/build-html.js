@@ -181,7 +181,10 @@ module.exports = function (grunt) {
             script: processHtmlTag,
             style: processHtmlTag,
             section: function (options) {
-                return options.files.map(grunt.file.read).join(EOL);
+                return options.files.map(function (f) {
+                    var content = grunt.file.read(f);
+                    return transformContent(content, options.params, options.dest)
+                }).join(EOL);
             },
 
             process: function (options) {
@@ -203,24 +206,62 @@ module.exports = function (grunt) {
 
     //#endregion
 
+    function transformContent(content, params, dest) {
+        var tags = getBuildTags(content),
+            config = grunt.config();
+
+        tags.forEach(function (tag) {
+            var raw = tag.lines.join(EOL),
+                result = "",
+                tagFiles = validators.validate(tag, params);
+
+            if (tagFiles) {
+                var options = _.extend({}, tag, {
+                    data: _.extend({}, config, params.data),
+                    files: tagFiles,
+                    dest: dest,
+                    prefix: params.prefix,
+                    relative: params.relative,
+                    params: params
+                });
+
+                result = processors.transform(options);
+            }
+            else if (tag.optional) {
+                if (params.logOptionals)
+                    grunt.log.error().error("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
+            }
+            else {
+                grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
+            }
+
+            content = content.replace(raw, function () { return result });
+        });
+
+        if (params.beautify) {
+            content = beautify.html(content, _.isObject(params.beautify) ? params.beautify : {});
+        }
+
+        return content;
+    }
+
     grunt.registerMultiTask('htmlbuild', "Grunt HTML Builder - Replace scripts and styles, Removes debug parts, append html partials, Template options", function () {
-        var config = grunt.config(),
-            params = this.options({
-                beautify: false,
-                logOptionals: false,
-                relative: true,
-                scripts: {},
-                styles: {},
-                sections: {},
-                data: {},
-                parseTag: 'build'
-            });
+        var params = this.options({
+            beautify: false,
+            logOptionals: false,
+            relative: true,
+            scripts: {},
+            styles: {},
+            sections: {},
+            data: {},
+            parseTag: 'build'
+        });
 
         setTagRegexes(params.parseTag);
 
         this.files.forEach(function (file) {
             var dest = file.dest || "",
-                destPath, content, tags;
+                destPath, content;
 
             file.src.forEach(function (src) {
                 if (params.replace) {
@@ -234,38 +275,7 @@ module.exports = function (grunt) {
                 }
 
                 content = grunt.util.normalizelf(grunt.file.read(src).toString());
-                tags = getBuildTags(content);
-
-                tags.forEach(function (tag) {
-                    var raw = tag.lines.join(EOL),
-                        result = "",
-                        tagFiles = validators.validate(tag, params);
-
-                    if (tagFiles) {
-                        var options = _.extend({}, tag, {
-                            data: _.extend({}, config, params.data),
-                            files: tagFiles,
-                            dest: dest,
-                            prefix: params.prefix,
-                            relative: params.relative
-                        });
-
-                        result = processors.transform(options);
-                    }
-                    else if (tag.optional) {
-                        if (params.logOptionals)
-                            grunt.log.error().error("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
-                    }
-                    else {
-                        grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
-                    }
-
-                    content = content.replace(raw, function () { return result });
-                });
-
-                if (params.beautify) {
-                    content = beautify.html(content, _.isObject(params.beautify) ? params.beautify : {});
-                }
+                content = transformContent(content, params, dest);
 
                 // write the contents to destination
                 grunt.file.write(destPath, content);
