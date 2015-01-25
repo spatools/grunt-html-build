@@ -40,7 +40,7 @@ module.exports = function (grunt) {
         },
 
         // Tags Regular Expressions
-        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] {name} --> {} required [] optional
+        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*(recursive)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] [recursive] {name} --> {} required [] optional
         regexTagEndTemplate = "<!--\\s*\\/%parseTag%\\s*-->", // <!-- /build -->
         regexTagStart = "",
         regexTagEnd = "",
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
 
             if (tagStart) {
                 tag = true;
-                last = { type: tagStart[1], inline: !!tagStart[2], optional: !!tagStart[3], name: tagStart[4], lines: [] };
+                last = { type: tagStart[1], inline: !!tagStart[2], optional: !!tagStart[3], recursive: !!tagStart[4], name: tagStart[5], lines: [] };
                 tags.push(last);
             }
 
@@ -182,8 +182,11 @@ module.exports = function (grunt) {
             style: processHtmlTag,
             section: function (options) {
                 return options.files.map(function (f) {
-                    var content = grunt.file.read(f);
-                    return transformContent(content, options.params, options.dest)
+                    var content = grunt.file.read(f).toString();
+
+                    return options.recursive ?
+                        transformContent(content, options.params, options.dest) :
+                        content;
                 }).join(EOL);
             },
 
@@ -274,8 +277,7 @@ module.exports = function (grunt) {
                     destPath = path.join(dest, path.basename(src));
                 }
 
-                content = grunt.util.normalizelf(grunt.file.read(src).toString());
-                content = transformContent(content, params, dest);
+                content = transformContent(grunt.file.read(src), params, dest);
 
                 // write the contents to destination
                 grunt.file.write(destPath, content);
