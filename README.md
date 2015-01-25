@@ -76,7 +76,7 @@ Using the configuration above, consider the following example html to see it in 
     <!-- build:section layout.header -->
     <!-- /build -->
 
-    <!-- build:section views -->
+    <!-- build:section recursive views -->
     <!-- /build -->
 
     <!-- build:section layout.footer -->
@@ -191,3 +191,6 @@ There 5 types of processors:
 * 0.4.0
     * Fix bug in prefix option
     * Allow recursive build using section processor
+* 0.4.1
+    * Fix prefix's ability to contain //, as in https://
+    * Add a new recursive option which can be added to section tag.
