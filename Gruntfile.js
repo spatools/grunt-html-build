@@ -41,5 +41,5 @@
 
     grunt.loadTasks('tasks');
 
-    grunt.registerTask('build', ['htmlbuild']);
+    grunt.registerTask('default', ['htmlbuild']);
 };
