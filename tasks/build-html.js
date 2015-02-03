@@ -140,7 +140,7 @@ module.exports = function (grunt) {
         }
         else {
             return options.files.map(function (f) {
-                var url = options.relative ? path.relative(path.dirname(options.dest), f) : f;
+                var url = options.relative ? path.relative(options.dest, f) : f;
                 
                 url = url.replace(/\\/g, '/');
 
