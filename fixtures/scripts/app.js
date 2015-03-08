@@ -1,1 +1,1 @@
-﻿
+﻿var version = "<%= version %>";

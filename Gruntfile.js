@@ -15,6 +15,7 @@
                             '<%= fixturesPath %>/scripts/*.js',
                             '!**/main.js',
                         ],
+                        inlineapp: '<%= fixturesPath %>/scripts/app.js',
                         main: '<%= fixturesPath %>/scripts/main.js'
                     },
                     styles: {
