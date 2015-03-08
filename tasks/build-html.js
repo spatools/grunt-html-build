@@ -104,7 +104,13 @@ module.exports = function (grunt) {
                 }
             }
 
-            return grunt.file.expand(opt, files);
+            files = grunt.file.expand(opt, files);
+
+            if (params.relative && opt.cwd) {
+                files = files.map(function (src) { return path.join(opt.cwd, src); });
+            }
+
+            return files;
         }
     }
     function validateBlockAlways(tag) {
@@ -140,7 +146,7 @@ module.exports = function (grunt) {
         }
         else {
             return options.files.map(function (f) {
-                var url = options.relative ? path.relative(path.dirname(options.dest), f) : f;
+                var url = options.relative ? path.relative(options.dest, f) : f;
                 
                 url = url.replace(/\\/g, '/');
 
