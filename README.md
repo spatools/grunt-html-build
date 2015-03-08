@@ -104,6 +104,11 @@ Using the configuration above, consider the following example html to see it in 
         main();
     </script>
     <!-- /build -->
+    <!-- build:script inline noprocess main -->
+    <script type="text/javascript">
+        main();
+    </script>
+    <!-- /build -->
 
     <!-- build:section optional test -->
     <!-- /build -->
@@ -137,7 +142,13 @@ After running the grunt task it will be stored on the dist folder as
             var version = "0.1.0",
                 title = "test";
         </script>
+
         <script type="text/javascript">
+            var version = "0.1.0";
+            productionMain();
+        </script>
+        <script type="text/javascript">
+            var version = "<%= version %>";
             productionMain();
         </script>
     </body>
@@ -194,3 +205,6 @@ There 5 types of processors:
 * 0.4.1
     * Fix prefix's ability to contain //, as in https://
     * Add a new recursive option which can be added to section tag.
+* 0.4.2
+    * Fix relative path error since 0.4.0
+    * Add noprocess option to tags to avoid underscore processing issues.
