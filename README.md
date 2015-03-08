@@ -86,7 +86,7 @@ Using the configuration above, consider the following example html to see it in 
     <script type="text/javascript" src="/path/to/js/only-dev.js"></script>
     <!-- /build -->
     
-    <!-- build:remove:dev -->
+    <!-- build:remove dev -->
     <script type="text/javascript" src="/path/analytics.js"></script>
     <!-- /build -->
 
@@ -140,6 +140,7 @@ After running the grunt task it will be stored on the dist folder as
         <div id="view2">...</div>
         <div id="view3">...</div>
         <footer>...</footer>
+        <script type="text/javascript" src="/path/analytics.js"></script>
         <script type="text/javascript" src="../fixtures/scripts/app.js"></script>
         <script type="text/javascript" src="../fixtures/scripts/libs.js"></script>
         <script type="text/javascript">
