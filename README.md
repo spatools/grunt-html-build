@@ -213,3 +213,5 @@ There 5 types of processors:
 * 0.4.2
     * Fix relative path error since 0.4.0
     * Add noprocess option to tags to avoid underscore processing issues.
+* 0.4.3
+    * Allow remove task to be configured by using current target.
