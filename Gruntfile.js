@@ -9,6 +9,7 @@
                 options: {
                     beautify: true,
                     //parseTag: 'htmlbuild',
+                    relative: true,
                     scripts: {
                         bundle: [
                             '<%= fixturesPath %>/scripts/*.js',
