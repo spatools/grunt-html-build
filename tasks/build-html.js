@@ -40,7 +40,7 @@ module.exports = function (grunt) {
         },
 
         // Tags Regular Expressions
-        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*(recursive)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] [recursive] {name} --> {} required [] optional
+        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*(recursive)?\\s*(noprocess)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] [recursive] {name} --> {} required [] optional
         regexTagEndTemplate = "<!--\\s*\\/%parseTag%\\s*-->", // <!-- /build -->
         regexTagStart = "",
         regexTagEnd = "",
@@ -62,7 +62,15 @@ module.exports = function (grunt) {
 
             if (tagStart) {
                 tag = true;
-                last = { type: tagStart[1], inline: !!tagStart[2], optional: !!tagStart[3], recursive: !!tagStart[4], name: tagStart[5], lines: [] };
+                last = {
+                    type: tagStart[1],
+                    inline: !!tagStart[2],
+                    optional: !!tagStart[3],
+                    recursive: !!tagStart[4],
+                    noprocess: !!tagStart[5], 
+                    name: tagStart[6],
+                    lines: []
+                };
                 tags.push(last);
             }
 
@@ -134,15 +142,20 @@ module.exports = function (grunt) {
     function processTemplate(template, options, extend) {
         return grunt.template.process(template, createTemplateData(options, extend));
     }
-    function processHtmlTagTemplate(options, extend, inline) {
-        var template = templates[options.type + (inline ? "-inline" : "")];
-        return processTemplate(template, options, extend);
+    function processHtmlTagTemplate(options, extend) {
+        var template = templates[options.type + (options.inline ? "-inline" : "")];
+        if (options.noprocess) {
+            return template.replace("<%= src %>", extend.src);
+        }
+        else {
+            return processTemplate(template, options, extend);
+        }
     }
 
     function processHtmlTag(options) {
         if (options.inline) {
             var content = options.files.map(grunt.file.read).join(EOL);
-            return processHtmlTagTemplate(options, { content: content }, true);
+            return processHtmlTagTemplate(options, { src: content });
         }
         else {
             return options.files.map(function (f) {
@@ -166,9 +179,9 @@ module.exports = function (grunt) {
     var
         templates = {
             'script': '<script type="text/javascript" src="<%= src %>"></script>',
-            'script-inline': '<script type="text/javascript"><%= content %></script>',
+            'script-inline': '<script type="text/javascript"><%= src %></script>',
             'style': '<link type="text/css" rel="stylesheet" href="<%= src %>" />',
-            'style-inline': '<style><%= content %></style>'
+            'style-inline': '<style><%= src %></style>'
         },
         validators = {
             script: validateBlockWithName,
