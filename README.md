@@ -215,3 +215,8 @@ There 5 types of processors:
     * Add noprocess option to tags to avoid underscore processing issues.
 * 0.4.3
     * Allow remove task to be configured by using current target.
+* 0.5.0
+    * Avoid javascript when parsing unknown tags.
+    * Add an `allowUnknownTags` option to ignore unknown tags without failing the task.
+    * Automatically adapt generated `link` tag for less files.
+    * Add `defer` and `async` options to script processor.
