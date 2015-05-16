@@ -15,12 +15,10 @@
     "url": "https://github.com/spatools/grunt-html-build/issues"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "js-beautify": "^1.4.2"
+    "grunt": "^0.4.5"
   },
   "dependencies": {
-    "grunt": "0.4.x",
-    "js-beautify": "^1.4.2"
+    "js-beautify": "^1.5.5"
   },
   "keywords": [
     "gruntplugin",
