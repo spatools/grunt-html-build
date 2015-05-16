@@ -24,7 +24,8 @@
                             cwd: '<%= fixturesPath %>',
                             files: [
                                 'css/libs.css',
-                                'css/dev.css'
+                                'css/dev.css',
+                                'css/another.less'
                             ]
                         },
                         test: '<%= fixturesPath %>/css/inline.css'
