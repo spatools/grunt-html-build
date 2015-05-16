@@ -8,6 +8,7 @@
                 dest: './samples/',
                 options: {
                     beautify: true,
+                    //allowUnknownTags: true,
                     //parseTag: 'htmlbuild',
                     relative: true,
                     scripts: {

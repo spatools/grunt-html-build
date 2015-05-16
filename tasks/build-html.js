@@ -193,6 +193,10 @@ module.exports = function (grunt) {
 
             //base method
             validate: function (tag, params) {
+                if (!validators[tag.type]) {
+                    return false;
+                }
+
                 return validators[tag.type](tag, params);
             }
         },
@@ -256,9 +260,17 @@ module.exports = function (grunt) {
 
                 result = processors.transform(options);
             }
+            else if (tagFiles === false) {
+                grunt.log.warn("Unknown tag detected: '" + tag.type + "'");
+
+                if (!params.allowUnknownTags) {
+                    grunt.fail.warn("Use 'parseTag' or 'allowUnknownTags' options to avoid this issue");
+                }
+            }
             else if (tag.optional) {
-                if (params.logOptionals)
-                    grunt.log.error().error("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
+                if (params.logOptionals) {
+                    grunt.log.warn("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
+                }
             }
             else {
                 grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
