@@ -218,5 +218,6 @@ There 5 types of processors:
 * 0.5.0
     * Avoid javascript when parsing unknown tags.
     * Add an `allowUnknownTags` option to ignore unknown tags without failing the task.
+    * Allow to specify `attributes` on script and styles tags.
+    * Allow http,https or // links to be processed as links.
     * Automatically adapt generated `link` tag for less files.
-    * Add `defer` and `async` options to script processor.
