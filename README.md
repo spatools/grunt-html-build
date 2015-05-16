@@ -216,7 +216,7 @@ There 5 types of processors:
 * 0.4.3
     * Allow remove task to be configured by using current target.
 * 0.5.0
-    * Avoid javascript when parsing unknown tags.
+    * Avoid javascript errors when parsing unknown tags.
     * Add an `allowUnknownTags` option to ignore unknown tags without failing the task.
     * Allow to specify `attributes` on script and styles tags.
     * Allow http,https or // links to be processed as links.
