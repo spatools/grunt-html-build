@@ -4,7 +4,13 @@
     <!-- build:style bundle -->
     <link rel="stylesheet" type="text/css" href="/path/to/css/dev.css" />
     <!-- /build -->
+    <!-- build:style bundle [media="screen and (max-width: 480px)"] -->
+    <link rel="stylesheet" type="text/css" href="/path/to/css/dev.css" />
+    <!-- /build -->
     <!-- build:style inline test -->
+    <link rel="stylesheet" type="text/css" href="/path/to/css/dev-inline.css" />
+    <!-- /build -->
+    <!-- build:style inline test [media="screen and (max-width: 480px)"] -->
     <link rel="stylesheet" type="text/css" href="/path/to/css/dev-inline.css" />
     <!-- /build -->
 </head>
@@ -13,11 +19,9 @@
     <!-- /build -->
     <!-- build:section recursive views -->
     <!-- /build -->
-
     <!-- build:remove -->
     <script type="text/javascript" src="/path/to/js/only-dev.js"></script>
     <!-- /build -->
-
     <!-- build:script bundle -->
     <script type="text/javascript" src="/path/to/js/libs/jquery.js"></script>
     <script type="text/javascript" src="/path/to/js/libs/knockout.js"></script>
@@ -39,16 +43,15 @@
             title = "<%= title %>";
     </script>
     <!-- /build -->
-    <!-- build:script defer main -->
+    <!-- build:script main [defer] -->
     <!-- /build -->
-    <!-- build:script async main -->
+    <!-- build:script main [async] -->
     <!-- /build -->
     <!-- build:script inline main -->
     <script type="text/javascript">
         main();
     </script>
     <!-- /build -->
-
     <!-- build:section optional test -->
     <!-- /build -->
 </body>

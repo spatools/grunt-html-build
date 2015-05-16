@@ -5,7 +5,15 @@
     <link type="text/css" rel="stylesheet" href="../fixtures/css/libs.css" />
     <link type="text/css" rel="stylesheet" href="../fixtures/css/dev.css" />
     <link type="text/css" rel="stylesheet/less" href="../fixtures/css/another.less" />
+    <link type="text/css" rel="stylesheet" media="screen and (max-width: 480px)" href="../fixtures/css/libs.css" />
+    <link type="text/css" rel="stylesheet" media="screen and (max-width: 480px)" href="../fixtures/css/dev.css" />
+    <link type="text/css" rel="stylesheet/less" media="screen and (max-width: 480px)" href="../fixtures/css/another.less" />
     <style>
+        .this-is-inline {
+            font-weight: bold;
+        }
+    </style>
+    <style media="screen and (max-width: 480px)">
         .this-is-inline {
             font-weight: bold;
         }
@@ -34,8 +42,6 @@
     <div id="view2"> ... </div>
     <div id="view3"> ... </div>
 
-
-
     <script type="text/javascript" src="../fixtures/scripts/app.js"></script>
     <script type="text/javascript" src="../fixtures/scripts/libs.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js"></script>
@@ -52,12 +58,11 @@
             title = "test";
     </script>
 
-    <script type="text/javascript" src="../fixtures/scripts/main.js" defer></script>
-    <script type="text/javascript" src="../fixtures/scripts/main.js" async></script>
+    <script type="text/javascript" defer src="../fixtures/scripts/main.js"></script>
+    <script type="text/javascript" async src="../fixtures/scripts/main.js"></script>
     <script type="text/javascript">
         productionMain();
     </script>
-
 
 </body>
 
