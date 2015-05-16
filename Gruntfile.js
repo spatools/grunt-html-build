@@ -16,6 +16,10 @@
                             '<%= fixturesPath %>/scripts/*.js',
                             '!**/main.js',
                         ],
+                        bundle_remote: [
+                            "//cdn.jsdelivr.net/jquery/2.1.0/jquery.min.js",
+                            "//cdn.jsdelivr.net/bootstrap/3.1.1/js/bootstrap.min.js"
+                        ],
                         inlineapp: '<%= fixturesPath %>/scripts/app.js',
                         main: '<%= fixturesPath %>/scripts/main.js'
                     },
