@@ -40,7 +40,7 @@ module.exports = function (grunt) {
         },
 
         // Tags Regular Expressions
-        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*(recursive)?\\s*(noprocess)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] [recursive] {name} --> {} required [] optional
+        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*(recursive)?\\s*(noprocess)?\\s*(defer)?\\s*(async)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] [recursive] {name} --> {} required [] optional
         regexTagEndTemplate = "<!--\\s*\\/%parseTag%\\s*-->", // <!-- /build -->
         regexTagStart = "",
         regexTagEnd = "",
@@ -67,8 +67,10 @@ module.exports = function (grunt) {
                     inline: !!tagStart[2],
                     optional: !!tagStart[3],
                     recursive: !!tagStart[4],
-                    noprocess: !!tagStart[5] || !tagStart[2],
-                    name: tagStart[6],
+                    noprocess: !!tagStart[5],
+                    defer: !!tagStart[6],
+                    async: !!tagStart[7],
+                    name: tagStart[8],
                     lines: []
                 };
                 tags.push(last);
@@ -144,14 +146,26 @@ module.exports = function (grunt) {
     }
     function processHtmlTagTemplate(options, extend) {
         var template = templates[options.type + (options.inline ? "-inline" : "")];
-        if (options.noprocess) {
+        if (!options.inline) {
             var result = template.replace("<%= src %>", extend.src);
 
-            if (!options.inline && options.type === "style" && path.extname(extend.src) === ".less") {
+            if (options.type === "style" && path.extname(extend.src) === ".less") {
                 result = result.replace('rel="stylesheet"', 'rel="stylesheet/less"');
             }
 
+            if (options.type === "script") {
+                if (options.async) {
+                    result = result.replace(">", " async>");
+                }
+                else if (options.defer) {
+                    result = result.replace(">", " defer>");
+                }
+            }
+
             return result;
+        }
+        else if (options.noprocess) {
+            return template.replace("<%= src %>", extend.src);
         }
         else {
             return processTemplate(template, options, extend);
