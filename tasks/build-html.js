@@ -89,6 +89,18 @@ module.exports = function (grunt) {
 
         return tags;
     }
+    function defaultProcessPath(pathes, params, opt) { //takes an array of paths and validates them
+        var local = grunt.file.expand(opt, pathes),
+            remote = _.map(pathes, path.normalize).filter(function (path) { //for loading from cdn
+                return /^((http|https):)?(\\|\/\/)/.test(path); //is http, https, or //
+            });
+
+        if (params.relative && opt.cwd) {
+            local = local.map(function (src) { return path.join(opt.cwd, src); });
+        }
+
+        return _.uniq(local.concat(remote));
+    }
     function validateBlockWithName(tag, params) {
         var src = params[tag.type + "s"],
 
@@ -110,17 +122,15 @@ module.exports = function (grunt) {
                 }
                 else {
                     // if paths are named, just take values
-                    files = _.values(src); 
+                    files = _.values(src);
                 }
             }
 
-            files = grunt.file.expand(opt, files);
-
-            if (params.relative && opt.cwd) {
-                files = files.map(function (src) { return path.join(opt.cwd, src); });
+            if (!Array.isArray(files)) {
+                files = [files];
             }
 
-            return files;
+            return params.processPath(files, params, opt);
         }
     }
     function validateBlockAlways(tag) {
@@ -180,7 +190,7 @@ module.exports = function (grunt) {
         else {
             return options.files.map(function (f) {
                 var url = options.relative ? path.relative(options.dest, f) : f;
-                
+
                 url = url.replace(/\\/g, '/');
 
                 if (options.prefix) {
@@ -315,7 +325,8 @@ module.exports = function (grunt) {
             styles: {},
             sections: {},
             data: {},
-            parseTag: 'build'
+            parseTag: 'build',
+            processPath: defaultProcessPath
         });
 
         setTagRegexes(params.parseTag);
