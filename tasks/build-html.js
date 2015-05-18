@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * grunt-html-build
  * https://github.com/spatools/grunt-html-build
  * Copyright (c) 2013 SPA Tools
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
         },
 
         // Tags Regular Expressions
-        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*(recursive)?\\s*(noprocess)?\\s*([^\\s]*)\\s*-->", // <!-- build:{type} [inline] [optional] [recursive] {name} --> {} required [] optional
+        regexTagStartTemplate = "<!--\\s*%parseTag%:(\\w+)\\s*(inline)?\\s*(optional)?\\s*(recursive)?\\s*(noprocess)?\\s*([^\\s]*)\\s*(?:\\[(.*)\\])?\\s*-->", // <!-- build:{type} (inline) (optional) (recursive) {name} [attributes...] --> {} required () optional
         regexTagEndTemplate = "<!--\\s*\\/%parseTag%\\s*-->", // <!-- /build -->
         regexTagStart = "",
         regexTagEnd = "",
@@ -67,8 +67,9 @@ module.exports = function (grunt) {
                     inline: !!tagStart[2],
                     optional: !!tagStart[3],
                     recursive: !!tagStart[4],
-                    noprocess: !!tagStart[5], 
+                    noprocess: !!tagStart[5],
                     name: tagStart[6],
+                    attributes: tagStart[7],
                     lines: []
                 };
                 tags.push(last);
@@ -86,6 +87,18 @@ module.exports = function (grunt) {
         });
 
         return tags;
+    }
+    function defaultProcessPath(pathes, params, opt) { //takes an array of paths and validates them
+        var local = grunt.file.expand(opt, pathes),
+            remote = _.map(pathes, path.normalize).filter(function (path) { //for loading from cdn
+                return /^((http|https):)?(\\|\/\/)/.test(path); //is http, https, or //
+            });
+
+        if (params.relative && opt.cwd) {
+            local = local.map(function (src) { return path.join(opt.cwd, src); });
+        }
+
+        return _.uniq(local.concat(remote));
     }
     function validateBlockWithName(tag, params) {
         var src = params[tag.type + "s"],
@@ -112,14 +125,12 @@ module.exports = function (grunt) {
                 }
             }
 
-            files = grunt.file.expand(opt, files);
-
-            if (params.relative && opt.cwd) {
-                files = files.map(function (src) { return path.join(opt.cwd, src); });
-            }
-
-            return files;
+            if (!Array.isArray(files)) {
+                files = [files];
         }
+
+            return params.processPath(files, params, opt);
+    }
     }
     function validateBlockAlways(tag) {
         return true;
@@ -134,40 +145,71 @@ module.exports = function (grunt) {
 
     //#region Processors Methods
 
-    function createTemplateData(options, extend) {
+    function createTemplateData(options, src, attrs) {
+        var extend = {};
+
+        if (src) {
+            extend.src = src;
+        }
+
+        if (attrs) {
+            extend.attributes = attrs;
+        }
+
         return {
-            data: extend ? _.extend({}, options.data, extend) : options.data
+            data: _.extend({}, options.data, extend)
         };
     }
-    function processTemplate(template, options, extend) {
-        return grunt.template.process(template, createTemplateData(options, extend));
+    function processTemplate(template, options, src, attrs) {
+        return grunt.template.process(template, createTemplateData(options, src, attrs));
     }
-    function processHtmlTagTemplate(options, extend) {
-        var template = templates[options.type + (options.inline ? "-inline" : "")];
-        if (options.noprocess) {
-            return template.replace("<%= src %>", extend.src);
+    function createAttributes(options, src) {
+        var attrs = options.attributes || "";
+
+        if (options.type === "script") {
+            attrs = 'type="text/javascript" ' + attrs;
+        }
+        else if (options.type === "style" && !options.inline) {
+            if (path.extname(src) === ".less") {
+                attrs = 'type="text/css" rel="stylesheet/less" ' + attrs;
+            }
+            else {
+                attrs = 'type="text/css" rel="stylesheet" ' + attrs;
+            }
+        }
+
+        return attrs.trim();
+    }
+    function processHtmlTagTemplate(options, src) {
+        var template = templates[options.type + (options.inline ? "-inline" : "")],
+            attrs = createAttributes(options, src);
+
+        if (!options.inline || options.noprocess) {
+            return template
+                    .replace("<%= src %>", src)
+                    .replace("<%= attributes %>", attrs);
         }
         else {
-            return processTemplate(template, options, extend);
+            return processTemplate(template, options, src, attrs);
         }
     }
 
     function processHtmlTag(options) {
         if (options.inline) {
             var content = options.files.map(grunt.file.read).join(EOL);
-            return processHtmlTagTemplate(options, { src: content });
+            return processHtmlTagTemplate(options, content);
         }
         else {
             return options.files.map(function (f) {
                 var url = options.relative ? path.relative(options.dest, f) : f;
-                
+
                 url = url.replace(/\\/g, '/');
 
                 if (options.prefix) {
                     url = URL.resolve(options.prefix.replace(/\\/g, '/'), url);
                 }
-
-                return processHtmlTagTemplate(options, { src: url });
+                
+                return processHtmlTagTemplate(options, url);
             }).join(EOL);
         }
     }
@@ -178,11 +220,11 @@ module.exports = function (grunt) {
 
     var
         templates = {
-            'script': '<script type="text/javascript" src="<%= src %>"></script>',
-            'script-inline': '<script type="text/javascript"><%= src %></script>',
+            'script':           '<script <%= attributes %> src="<%= src %>"></script>',
+            'script-inline':    '<script <%= attributes %>><%= src %></script>',
             'component': '<link rel="import" href="<%= src %>" />',
-            'style': '<link type="text/css" rel="stylesheet" href="<%= src %>" />',
-            'style-inline': '<style><%= src %></style>'
+            'style':            '<link <%= attributes %> href="<%= src %>" />',
+            'style-inline':     '<style <%= attributes %>><%= src %></style>'
         },
         validators = {
             script: validateBlockWithName,
@@ -195,6 +237,10 @@ module.exports = function (grunt) {
 
             //base method
             validate: function (tag, params) {
+                if (!validators[tag.type]) {
+                    return false;
+                }
+
                 return validators[tag.type](tag, params);
             }
         },
@@ -242,37 +288,45 @@ module.exports = function (grunt) {
         var tags = getBuildTags(content),
             config = grunt.config();
 
-        tags.forEach(function (tag) {
-            var raw = tag.lines.join(EOL),
-                result = "",
-                tagFiles = validators.validate(tag, params);
+                tags.forEach(function (tag) {
+                    var raw = tag.lines.join(EOL),
+                        result = "",
+                        tagFiles = validators.validate(tag, params);
 
-            if (tagFiles) {
-                var options = _.extend({}, tag, {
-                    data: _.extend({}, config, params.data),
-                    files: tagFiles,
-                    dest: dest,
-                    prefix: params.prefix,
+                    if (tagFiles) {
+                        var options = _.extend({}, tag, {
+                            data: _.extend({}, config, params.data),
+                            files: tagFiles,
+                            dest: dest,
+                            prefix: params.prefix,
                     relative: params.relative,
                     params: params
+                        });
+
+                        result = processors.transform(options);
+                    }
+            else if (tagFiles === false) {
+                grunt.log.warn("Unknown tag detected: '" + tag.type + "'");
+
+                if (!params.allowUnknownTags) {
+                    grunt.fail.warn("Use 'parseTag' or 'allowUnknownTags' options to avoid this issue");
+                }
+            }
+                    else if (tag.optional) {
+                if (params.logOptionals) {
+                    grunt.log.warn("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
+                }
+                    }
+                    else {
+                        grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
+                    }
+
+                    content = content.replace(raw, function () { return result });
                 });
 
-                result = processors.transform(options);
-            }
-            else if (tag.optional) {
-                if (params.logOptionals)
-                    grunt.log.error().error("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
-            }
-            else {
-                grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
-            }
-
-            content = content.replace(raw, function () { return result });
-        });
-
-        if (params.beautify) {
-            content = beautify.html(content, _.isObject(params.beautify) ? params.beautify : {});
-        }
+                if (params.beautify) {
+                    content = beautify.html(content, _.isObject(params.beautify) ? params.beautify : {});
+                }
 
         return content;
     }
@@ -287,7 +341,8 @@ module.exports = function (grunt) {
             components: {},
             sections: {},
             data: {},
-            parseTag: 'build'
+            parseTag: 'build',
+            processPath: defaultProcessPath
         });
 
         setTagRegexes(params.parseTag);
