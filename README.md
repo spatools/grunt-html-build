@@ -1,15 +1,15 @@
-# grunt-html-build [![NPM version](https://badge.fury.io/js/grunt-html-build.png)](http://badge.fury.io/js/grunt-html-build)
+# grunt-contrib-html-build 
 
 [Grunt][grunt] HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options
 
 ## Getting Started
 
-Install this grunt plugin next to your project's gruntfile with: `npm install grunt-html-build --save-dev`
+Install this grunt plugin next to your project's gruntfile with: `npm install grunt-contrib-html-build --save-dev`
 
 Then add this line to your project's `Gruntfile.js` :
 
 ```javascript
-grunt.loadNpmTasks('grunt-html-build');
+grunt.loadNpmTasks('grunt-contrib-html-build');
 ```
 
 Then specify your config: ([more informations][doc-options])
@@ -17,7 +17,11 @@ Then specify your config: ([more informations][doc-options])
 ```javascript
 grunt.initConfig({
     fixturesPath: "fixtures",
-
+    components : Object.keys(grunt.file.readJSON('./bower.json').dependencies).map(
+        function(prodComponent) {
+            return "source/polymer/"+prodComponent+"/"+prodComponent+".html";
+        }
+    ),
     htmlbuild: {
         dist: {
             src: 'index.html',
@@ -39,6 +43,10 @@ grunt.initConfig({
                         '<%= fixturesPath %>/css/dev.css'
                     ],
                     test: '<%= fixturesPath %>/css/inline.css'
+                },
+                components: {
+                    bundle: ['<%= components %>',
+                             'source/polymer/font-roboto/roboto.html']
                 },
                 sections: {
                     views: '<%= fixturesPath %>/views/**/*.html',
@@ -71,6 +79,11 @@ Using the configuration above, consider the following example html to see it in 
     <!-- build:style inline test -->
     <link rel="stylesheet" type="text/css" href="/path/to/css/dev-inline.css" />
     <!-- /build -->
+    
+    <!-- build:component bundle -->
+    <link rel="import" href="../polymer/polymer/polymer.html" />
+    <!-- /build -->
+    
 </head>
 <body id="landing-page">
     <!-- build:section layout.header -->
@@ -133,6 +146,22 @@ After running the grunt task it will be stored on the dist folder as
                 font-weight: bold;
             }
         </style>
+        
+        <link rel="import" href="../polymer/polymer/polymer.html" />
+        <link rel="import" href="../polymer/core-drawer-panel/core-drawer-panel.html" />
+        <link rel="import" href="../polymer/core-header-panel/core-header-panel.html" />
+        <link rel="import" href="../polymer/core-icon-button/core-icon-button.html" />
+        <link rel="import" href="../polymer/core-item/core-item.html" />
+        <link rel="import" href="../polymer/core-label/core-label.html" />
+        <link rel="import" href="../polymer/core-menu/core-menu.html" />
+        <link rel="import" href="../polymer/core-toolbar/core-toolbar.html" />
+        <link rel="import" href="../polymer/paper-button/paper-button.html" />
+        <link rel="import" href="../polymer/paper-input/paper-input.html" />
+        <link rel="import" href="../polymer/paper-shadow/paper-shadow.html" />
+        <link rel="import" href="../polymer/paper-spinner/paper-spinner.html" />
+        <link rel="import" href="../polymer/paper-toast/paper-toast.html" />
+        <link rel="import" href="../polymer/font-roboto/roboto.html" />
+    
     </head>
     <body id="landing-page">
         <header>...</header>
@@ -174,12 +203,12 @@ There 5 types of processors:
     * it will erase the whole block.
 
 [grunt]: https://github.com/gruntjs/grunt
-[doc-options]: https://github.com/spatools/grunt-html-build/wiki/Task-Options
-[doc-scripts-styles]: https://github.com/spatools/grunt-html-build/wiki/Linking-Scripts-and-Styles
-[doc-sections]: https://github.com/spatools/grunt-html-build/wiki/Creating-HTML-Sections
-[doc-process]: https://github.com/spatools/grunt-html-build/wiki/Using-HTML-as-Template
-[doc-remove]: https://github.com/spatools/grunt-html-build/wiki/Removing-parts
-[doc-reuse]: https://github.com/spatools/grunt-html-build/wiki/Creating-reusable-HTML-Layout-Template
+[doc-options]: https://github.com/techfano/grunt-html-build/wiki/Task-Options
+[doc-scripts-styles]: https://github.com/techfano/grunt-html-build/wiki/Linking-Scripts-and-Styles
+[doc-sections]: https://github.com/techfano/grunt-html-build/wiki/Creating-HTML-Sections
+[doc-process]: https://github.com/techfano/grunt-html-build/wiki/Using-HTML-as-Template
+[doc-remove]: https://github.com/techfano/grunt-html-build/wiki/Removing-parts
+[doc-reuse]: https://github.com/techfano/grunt-html-build/wiki/Creating-reusable-HTML-Layout-Template
 
 ## Release History
 * 0.1.0 Initial Release
@@ -221,3 +250,5 @@ There 5 types of processors:
     * Allow to specify `attributes` on script and styles tags.
     * Allow http,https or // links to be processed as links.
     * Automatically adapt generated `link` tag for less files.
+*0.5.1
+    * Adding automatically generation link import tag for polymerJS dependencies.

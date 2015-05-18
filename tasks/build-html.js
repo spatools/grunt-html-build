@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * grunt-html-build
  * https://github.com/spatools/grunt-html-build
  * Copyright (c) 2013 SPA Tools
@@ -222,12 +222,14 @@ module.exports = function (grunt) {
         templates = {
             'script':           '<script <%= attributes %> src="<%= src %>"></script>',
             'script-inline':    '<script <%= attributes %>><%= src %></script>',
+            'component': '<link rel="import" href="<%= src %>" />',
             'style':            '<link <%= attributes %> href="<%= src %>" />',
             'style-inline':     '<style <%= attributes %>><%= src %></style>'
         },
         validators = {
             script: validateBlockWithName,
             style: validateBlockWithName,
+            component: validateBlockWithName,
             section: validateBlockWithName,
 
             process: validateBlockAlways,
@@ -245,6 +247,7 @@ module.exports = function (grunt) {
         processors = {
             script: processHtmlTag,
             style: processHtmlTag,
+            component: processHtmlTag,
             section: function (options) {
                 return options.files.map(function (f) {
                     var content = grunt.file.read(f).toString();
@@ -335,6 +338,7 @@ module.exports = function (grunt) {
             relative: true,
             scripts: {},
             styles: {},
+            components: {},
             sections: {},
             data: {},
             parseTag: 'build',

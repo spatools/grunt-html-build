@@ -1,18 +1,18 @@
 {
-  "name": "grunt-html-build",
+  "name": "grunt-contrib-html-build",
   "description": "Grunt HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options",
-  "version": "0.5.0",
-  "homepage": "https://github.com/spatools/grunt-html-build.git",
+  "version": "0.5.6",
+  "homepage": "https://github.com/techfano/grunt-html-build.gitt",
   "author": {
-    "name": "SPA Tools",
-    "url": "http://github.com/spatools/"
+    "name": "Techfano",
+    "url": "http://github.com/techfano/"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/spatools/grunt-html-build.git"
+    "url": "git://github.com/techfano/grunt-html-build.git"
   },
   "bugs": {
-    "url": "https://github.com/spatools/grunt-html-build/issues"
+    "url": "https://github.com/techfano/grunt-html-build/issues"
   },
   "devDependencies": {
     "grunt": "^0.4.5"
