@@ -1,10 +1,10 @@
-# grunt-html-build 
+# grunt-contrib-html-build 
 
 [Grunt][grunt] HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options
 
 ## Getting Started
 
-Install this grunt plugin next to your project's gruntfile with: `npm install grunt-html-build --save-dev`
+Install this grunt plugin next to your project's gruntfile with: `npm install grunt-contrib-html-build --save-dev`
 
 Then add this line to your project's `Gruntfile.js` :
 
