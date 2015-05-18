@@ -1,4 +1,4 @@
-# grunt-html-build [![NPM version](https://badge.fury.io/js/grunt-html-build.png)](http://badge.fury.io/js/grunt-html-build)
+# grunt-html-build 
 
 [Grunt][grunt] HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options
 
@@ -205,12 +205,12 @@ There 5 types of processors:
     * it will erase the whole block.
 
 [grunt]: https://github.com/gruntjs/grunt
-[doc-options]: https://github.com/spatools/grunt-html-build/wiki/Task-Options
-[doc-scripts-styles]: https://github.com/spatools/grunt-html-build/wiki/Linking-Scripts-and-Styles
-[doc-sections]: https://github.com/spatools/grunt-html-build/wiki/Creating-HTML-Sections
-[doc-process]: https://github.com/spatools/grunt-html-build/wiki/Using-HTML-as-Template
-[doc-remove]: https://github.com/spatools/grunt-html-build/wiki/Removing-parts
-[doc-reuse]: https://github.com/spatools/grunt-html-build/wiki/Creating-reusable-HTML-Layout-Template
+[doc-options]: https://github.com/techfano/grunt-html-build/wiki/Task-Options
+[doc-scripts-styles]: https://github.com/techfano/grunt-html-build/wiki/Linking-Scripts-and-Styles
+[doc-sections]: https://github.com/techfano/grunt-html-build/wiki/Creating-HTML-Sections
+[doc-process]: https://github.com/techfano/grunt-html-build/wiki/Using-HTML-as-Template
+[doc-remove]: https://github.com/techfano/grunt-html-build/wiki/Removing-parts
+[doc-reuse]: https://github.com/techfano/grunt-html-build/wiki/Creating-reusable-HTML-Layout-Template
 
 ## Release History
 * 0.1.0 Initial Release
