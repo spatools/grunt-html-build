@@ -318,6 +318,11 @@ module.exports = function (grunt) {
                         grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
                     }
 
+                    // we don't want to remove the tags, otherwise users have to
+                    // re-apply the tags to the html after each successful build
+                    var open = tag.lines[0].replace(/^\s+|\s+$/g, '') + '\n',
+                        close = '\n' + tag.lines.slice(-1)[0].replace(/^\s+|\s+$/g, '');
+
                     content = content.replace(raw, function () { return result });
                 });
 
