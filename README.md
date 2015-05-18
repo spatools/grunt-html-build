@@ -17,6 +17,12 @@ Then specify your config: ([more informations][doc-options])
 ```javascript
 grunt.initConfig({
     fixturesPath: "fixtures",
+    
+    components : Object.keys(grunt.file.readJSON('./bower.json').dependencies).map(
+        function(prodComponent) {
+            return "source/polymer/"+prodComponent+"/"+prodComponent+".html";
+        }
+    ),
 
     htmlbuild: {
         dist: {
@@ -39,6 +45,10 @@ grunt.initConfig({
                         '<%= fixturesPath %>/css/dev.css'
                     ],
                     test: '<%= fixturesPath %>/css/inline.css'
+                },
+                components: {
+                    bundle: ['<%= components %>',
+                             'source/polymer/font-roboto/roboto.html']
                 },
                 sections: {
                     views: '<%= fixturesPath %>/views/**/*.html',
@@ -71,6 +81,11 @@ Using the configuration above, consider the following example html to see it in 
     <!-- build:style inline test -->
     <link rel="stylesheet" type="text/css" href="/path/to/css/dev-inline.css" />
     <!-- /build -->
+    
+    <!-- build:component bundle -->
+    <link rel="import" href="../polymer/polymer/polymer.html" />
+    <!-- /build -->
+    
 </head>
 <body id="landing-page">
     <!-- build:section layout.header -->
@@ -133,6 +148,22 @@ After running the grunt task it will be stored on the dist folder as
                 font-weight: bold;
             }
         </style>
+        
+        <link rel="import" href="../polymer/polymer/polymer.html" />
+        <link rel="import" href="../polymer/core-drawer-panel/core-drawer-panel.html" />
+        <link rel="import" href="../polymer/core-header-panel/core-header-panel.html" />
+        <link rel="import" href="../polymer/core-icon-button/core-icon-button.html" />
+        <link rel="import" href="../polymer/core-item/core-item.html" />
+        <link rel="import" href="../polymer/core-label/core-label.html" />
+        <link rel="import" href="../polymer/core-menu/core-menu.html" />
+        <link rel="import" href="../polymer/core-toolbar/core-toolbar.html" />
+        <link rel="import" href="../polymer/paper-button/paper-button.html" />
+        <link rel="import" href="../polymer/paper-input/paper-input.html" />
+        <link rel="import" href="../polymer/paper-shadow/paper-shadow.html" />
+        <link rel="import" href="../polymer/paper-spinner/paper-spinner.html" />
+        <link rel="import" href="../polymer/paper-toast/paper-toast.html" />
+        <link rel="import" href="../polymer/font-roboto/roboto.html" />
+    
     </head>
     <body id="landing-page">
         <header>...</header>
@@ -221,3 +252,5 @@ There 5 types of processors:
     * Allow to specify `attributes` on script and styles tags.
     * Allow http,https or // links to be processed as links.
     * Automatically adapt generated `link` tag for less files.
+*0.5.1
+    * Adding automatically generation link import tag for polymerJS dependencies.
