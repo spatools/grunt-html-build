@@ -17,13 +17,11 @@ Then specify your config: ([more informations][doc-options])
 ```javascript
 grunt.initConfig({
     fixturesPath: "fixtures",
-    
     components : Object.keys(grunt.file.readJSON('./bower.json').dependencies).map(
         function(prodComponent) {
             return "source/polymer/"+prodComponent+"/"+prodComponent+".html";
         }
     ),
-
     htmlbuild: {
         dist: {
             src: 'index.html',
