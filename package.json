@@ -1,7 +1,7 @@
 {
   "name": "grunt-contrib-html-build",
   "description": "Grunt HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "homepage": "https://github.com/techfano/grunt-html-build.gitt",
   "author": {
     "name": "Techfano",
