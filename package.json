@@ -1,7 +1,7 @@
 {
   "name": "grunt-html-build",
   "description": "Grunt HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "homepage": "https://github.com/spatools/grunt-html-build.git",
   "author": {
     "name": "SPA Tools",
