@@ -228,6 +228,7 @@ module.exports = function (grunt) {
         validators = {
             script: validateBlockWithName,
             style: validateBlockWithName,
+            component: validateBlockWithName,
             section: validateBlockWithName,
 
             process: validateBlockAlways,
@@ -245,6 +246,7 @@ module.exports = function (grunt) {
         processors = {
             script: processHtmlTag,
             style: processHtmlTag,
+            component: processHtmlTag,
             section: function (options) {
                 return options.files.map(function (f) {
                     var content = grunt.file.read(f).toString();
@@ -335,6 +337,7 @@ module.exports = function (grunt) {
             relative: true,
             scripts: {},
             styles: {},
+            components: {},
             sections: {},
             data: {},
             parseTag: 'build',
