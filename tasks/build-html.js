@@ -318,7 +318,7 @@ module.exports = function (grunt) {
                         grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
                     }
 
-                    content = content.replace(raw, function () { return result });
+                    content = content.replace(/\r\n/g, '\n').replace(raw, function () { return result });
                 });
 
                 if (params.beautify) {
