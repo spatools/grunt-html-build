@@ -219,5 +219,7 @@ There 5 types of processors:
     * Avoid javascript errors when parsing unknown tags.
     * Add an `allowUnknownTags` option to ignore unknown tags without failing the task.
     * Allow to specify `attributes` on script and styles tags.
-    * Allow http,https or // links to be processed as links.
+    * Allow http, https or // links to be processed as links.
     * Automatically adapt generated `link` tag for less files.
+* 0.5.1
+    * Fix issue in linefeed simplification
