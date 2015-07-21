@@ -51,7 +51,7 @@ module.exports = function (grunt) {
     //#region Private Methods
 
     function getBuildTags(content) {
-        var lines = content.replace(/\r\n/g, '\n').split(/\n/),
+        var lines = content.replace(/\r?\n/g, '\n').split(/\n/),
             tag = false,
             tags = [],
             last;
@@ -121,16 +121,16 @@ module.exports = function (grunt) {
                 }
                 else {
                     // if paths are named, just take values
-                    files = _.values(src); 
+                    files = _.values(src);
                 }
             }
 
             if (!Array.isArray(files)) {
                 files = [files];
-        }
+            }
 
             return params.processPath(files, params, opt);
-    }
+        }
     }
     function validateBlockAlways(tag) {
         return true;
@@ -208,7 +208,7 @@ module.exports = function (grunt) {
                 if (options.prefix) {
                     url = URL.resolve(options.prefix.replace(/\\/g, '/'), url);
                 }
-                
+
                 return processHtmlTagTemplate(options, url);
             }).join(EOL);
         }
@@ -220,10 +220,10 @@ module.exports = function (grunt) {
 
     var
         templates = {
-            'script':           '<script <%= attributes %> src="<%= src %>"></script>',
-            'script-inline':    '<script <%= attributes %>><%= src %></script>',
-            'style':            '<link <%= attributes %> href="<%= src %>" />',
-            'style-inline':     '<style <%= attributes %>><%= src %></style>'
+            'script': '<script <%= attributes %> src="<%= src %>"></script>',
+            'script-inline': '<script <%= attributes %>><%= src %></script>',
+            'style': '<link <%= attributes %> href="<%= src %>" />',
+            'style-inline': '<style <%= attributes %>><%= src %></style>'
         },
         validators = {
             script: validateBlockWithName,
@@ -285,23 +285,23 @@ module.exports = function (grunt) {
         var tags = getBuildTags(content),
             config = grunt.config();
 
-                tags.forEach(function (tag) {
-                    var raw = tag.lines.join(EOL),
-                        result = "",
-                        tagFiles = validators.validate(tag, params);
+        tags.forEach(function (tag) {
+            var raw = tag.lines.join(EOL),
+                result = "",
+                tagFiles = validators.validate(tag, params);
 
-                    if (tagFiles) {
-                        var options = _.extend({}, tag, {
-                            data: _.extend({}, config, params.data),
-                            files: tagFiles,
-                            dest: dest,
-                            prefix: params.prefix,
+            if (tagFiles) {
+                var options = _.extend({}, tag, {
+                    data: _.extend({}, config, params.data),
+                    files: tagFiles,
+                    dest: dest,
+                    prefix: params.prefix,
                     relative: params.relative,
                     params: params
-                        });
+                });
 
-                        result = processors.transform(options);
-                    }
+                result = processors.transform(options);
+            }
             else if (tagFiles === false) {
                 grunt.log.warn("Unknown tag detected: '" + tag.type + "'");
 
@@ -309,21 +309,21 @@ module.exports = function (grunt) {
                     grunt.fail.warn("Use 'parseTag' or 'allowUnknownTags' options to avoid this issue");
                 }
             }
-                    else if (tag.optional) {
+            else if (tag.optional) {
                 if (params.logOptionals) {
                     grunt.log.warn("Tag with type: '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js but is set optional, deleting block !");
                 }
-                    }
-                    else {
-                        grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
-                    }
+            }
+            else {
+                grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
+            }
 
-                    content = content.replace(raw, function () { return result });
-                });
+            content = content.replace(raw, function () { return result });
+        });
 
-                if (params.beautify) {
-                    content = beautify.html(content, _.isObject(params.beautify) ? params.beautify : {});
-                }
+        if (params.beautify) {
+            content = beautify.html(content, _.isObject(params.beautify) ? params.beautify : {});
+        }
 
         return content;
     }
