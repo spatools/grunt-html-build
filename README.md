@@ -120,7 +120,7 @@ Using the configuration above, consider the following example html to see it in 
 </html>
 ```
 
-After running the grunt task it will be stored on the dist folder as
+After running the grunt task it will be stored on the samples folder as
 
 ```html
 <html>
