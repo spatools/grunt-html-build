@@ -22,7 +22,7 @@ grunt.initConfig({
                     main: 'scripts/main.js'
                 },
                 styles: {
-                    bundle: [ 
+                    bundle: [
                         'css/libs.css',
                         'css/dev.css'
                     ],
@@ -47,7 +47,7 @@ grunt.initConfig({
  **type:** string, array |
  **required**
 
-Specify input files to build. 
+Specify input files to build.
 Accept globbing patterns
 
 ### dest
@@ -121,6 +121,39 @@ scripts: {
  **default:** false
 
 True to beautify HTML result
+
+### options.prefix
+ **type:** string |
+ **optional** |
+
+ Add a prefix to destination pathname.  Uses the resolve method from the Node URL library.  
+
+### options.removePrefix
+**type:** string |
+**optional** |
+
+Remove a prefix to destination pathname.  The method first takes the full source file path, then removes the difference determined by the prefix.  This is useful when running grunt-html-build with ejs files in Express.js.  Note that using removePrefix will override any prefix options.
+
+```javascript
+scripts: {
+  src: './templates/landing.ejs',
+  dest: './views/',
+  options: {
+      removePrefix: 'public',
+      scripts: {
+        bundle: [
+            './public/js/*.js',
+            '!**/main.js',
+        ]
+    },
+}
+```
+Result:
+```html
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/sideBar.js"></script>
+```
+
 
 ### options.logOptions
  **type :** bool |
