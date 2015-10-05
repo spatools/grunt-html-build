@@ -28,7 +28,7 @@ module.exports = function (grunt) {
     //#region Global Properties
 
     var // Init 
-        _ = grunt.util._,
+        _ = require('lodash'),
         EOL = grunt.util.linefeed,
         URL = require('url'),
         path = require('path'),
@@ -90,7 +90,8 @@ module.exports = function (grunt) {
     }
     function defaultProcessPath(pathes, params, opt) { //takes an array of paths and validates them
         var local = grunt.file.expand(opt, pathes),
-            remote = _.map(pathes, path.normalize).filter(function (path) { //for loading from cdn
+            flattenPaths = _.isArray(pathes) ? _.flattenDeep(pathes) : pathes,
+            remote = _.map(flattenPaths, path.normalize).filter(function (path) { //for loading from cdn
                 return /^((http|https):)?(\\|\/\/)/.test(path); //is http, https, or //
             });
 
