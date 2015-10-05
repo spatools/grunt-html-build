@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/schoes/grunt-html-build.git"
+    "url": "git://github.com/spatools/grunt-html-build.git"
   },
   "bugs": {
     "url": "https://github.com/spatools/grunt-html-build/issues"
