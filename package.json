@@ -3,6 +3,7 @@
   "description": "Grunt HTML Builder - Appends scripts and styles, Removes debug parts, append html partials, Template options",
   "version": "0.5.2",
   "homepage": "https://github.com/spatools/grunt-html-build.git",
+  "license": "MIT",
   "author": {
     "name": "SPA Tools",
     "url": "http://github.com/spatools/"
@@ -18,8 +19,8 @@
     "grunt": "^0.4.5"
   },
   "dependencies": {
-    "js-beautify": "^1.5.5",
-    "lodash":"^3.10.0"
+    "js-beautify": "^1.5.10",
+    "lodash":"^3.10.1"
   },
   "keywords": [
     "gruntplugin",

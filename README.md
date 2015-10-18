@@ -223,3 +223,7 @@ There 5 types of processors:
     * Automatically adapt generated `link` tag for less files.
 * 0.5.1
     * Fix issue in linefeed simplification
+* 0.5.2
+    * Fix issue in relative path management
+    * Remove deprecated undercore reference and replace by lodash dependency
+    * Fix deep array flattening for Node.JS >= 4

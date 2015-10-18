@@ -202,7 +202,6 @@ module.exports = function (grunt) {
         }
         else {
             var destDir = options.relative && isFileRegex.test(options.dest) ? path.dirname(options.dest) : options.dest;
-            console.log(options.dest, destDir);
             
             return options.files.map(function (f) {
                 var url = options.relative ? path.relative(destDir, f) : f;
