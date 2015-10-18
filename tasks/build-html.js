@@ -200,9 +200,11 @@ module.exports = function (grunt) {
             return processHtmlTagTemplate(options, content);
         }
         else {
+            var destDir = options.relative && isFileRegex.test(options.dest) ? path.dirname(options.dest) : options.dest;
+            console.log(options.dest, destDir);
+            
             return options.files.map(function (f) {
-                var url = options.relative ? path.relative(options.dest, f) : f;
-
+                var url = options.relative ? path.relative(destDir, f) : f;
                 url = url.replace(/\\/g, '/');
 
                 if (options.prefix) {
