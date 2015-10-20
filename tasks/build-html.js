@@ -287,8 +287,17 @@ module.exports = function (grunt) {
         var tags = getBuildTags(content),
             config = grunt.config();
 
+        function detectLineEnding(line) {
+            if (line.indexOf('\r\n') !== -1) {
+                return '\r\n';
+            }
+            else {
+                return '\n';
+            }
+        }
+
         tags.forEach(function (tag) {
-            var raw = tag.lines.join(EOL),
+            var raw = tag.lines.join(detectLineEnding(tag.lines[0])),
                 result = "",
                 tagFiles = validators.validate(tag, params);
 
