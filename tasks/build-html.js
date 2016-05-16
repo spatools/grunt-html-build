@@ -28,11 +28,11 @@ module.exports = function (grunt) {
     //#region Global Properties
 
     var // Init 
-        _ = require('lodash'),
+        _ = require("lodash"),
         EOL = grunt.util.linefeed,
-        URL = require('url'),
-        path = require('path'),
-        beautifier = require('js-beautify'),
+        URL = require("url"),
+        path = require("path"),
+        beautifier = require("js-beautify"),
         beautify = {
             js: beautifier.js,
             css: beautifier.css,
@@ -51,7 +51,7 @@ module.exports = function (grunt) {
     //#region Private Methods
 
     function getBuildTags(content) {
-        var lines = content.replace(/\r?\n/g, '\n').split(/\n/),
+        var lines = content.replace(/\r?\n/g, "\n").split(/\n/),
             tag = false,
             tags = [],
             last;
@@ -147,15 +147,10 @@ module.exports = function (grunt) {
     //#region Processors Methods
 
     function createTemplateData(options, src, attrs) {
-        var extend = {};
-
-        if (src) {
-            extend.src = src;
-        }
-
-        if (attrs) {
-            extend.attributes = attrs;
-        }
+        var extend = {
+            src: src || "",
+            attributes: attrs || ""
+        };
 
         return {
             data: _.extend({}, options.data, extend)
@@ -187,14 +182,14 @@ module.exports = function (grunt) {
 
         if (!options.inline || options.noprocess) {
             return template
-                    .replace(/\<\%\= (src|attributes) \%\>/g, function(match, p1) {
-                        if(p1 == 'src') {
-                            return src;
-                        }
-                        else if(p1 == 'attributes') {
-                            return attrs;
-                        }
-                    });
+                .replace(/\<\%\= (src|attributes) \%\>/g, function (match, p1) {
+                    if (p1 === "src") {
+                        return src;
+                    }
+                    else if (p1 === "attributes") {
+                        return attrs;
+                    }
+                });
         }
         else {
             return processTemplate(template, options, src, attrs);
@@ -208,13 +203,13 @@ module.exports = function (grunt) {
         }
         else {
             var destDir = options.relative && isFileRegex.test(options.dest) ? path.dirname(options.dest) : options.dest;
-            
+
             return options.files.map(function (f) {
                 var url = options.relative ? path.relative(destDir, f) : f;
-                url = url.replace(/\\/g, '/');
+                url = url.replace(/\\/g, "/");
 
                 if (options.prefix) {
-                    url = URL.resolve(options.prefix.replace(/\\/g, '/'), url);
+                    url = URL.resolve(options.prefix.replace(/\\/g, "/"), url);
                 }
 
                 return processHtmlTagTemplate(options, url);
@@ -265,10 +260,10 @@ module.exports = function (grunt) {
 
             process: function (options) {
                 return options.lines
-                                .map(function (l) { return processTemplate(l, options); })
-                                .join(EOL)
-                                .replace(new RegExp(regexTagStart), "")
-                                .replace(new RegExp(regexTagEnd), "");
+                    .map(function (l) { return processTemplate(l, options); })
+                    .join(EOL)
+                    .replace(new RegExp(regexTagStart), "")
+                    .replace(new RegExp(regexTagEnd), "");
             },
             remove: function (options) {
                 if (!options.name) return "";
@@ -295,7 +290,7 @@ module.exports = function (grunt) {
 
         tags.forEach(function (tag) {
             var raw = tag.lines.join(EOL),
-                result = "",
+                result = "", prefix = "", suffix = "",
                 tagFiles = validators.validate(tag, params);
 
             if (tagFiles) {
@@ -325,8 +320,13 @@ module.exports = function (grunt) {
             else {
                 grunt.fail.warn("Tag with type '" + tag.type + "' and name: '" + tag.name + "' is not configured in your Gruntfile.js !");
             }
+            
+            if (params.keepTags) {
+                prefix = raw.match(new RegExp(regexTagStart + "\\s*"))[0];
+                suffix = raw.match(new RegExp(regexTagEnd + "\\s*"))[0];
+            }
 
-            content = content.replace(raw, function () { return result });
+            content = content.replace(raw, function () { return prefix + result + suffix; });
         });
 
         if (params.beautify) {
@@ -341,6 +341,7 @@ module.exports = function (grunt) {
             beautify: false,
             logOptionals: false,
             relative: true,
+            keepTags: false,
             scripts: {},
             styles: {},
             sections: {},

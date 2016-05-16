@@ -10,6 +10,7 @@
                     beautify: true,
                     //allowUnknownTags: true,
                     //parseTag: 'htmlbuild',
+                    // keepTags: true,
                     relative: true,
                     scripts: {
                         bundle: [
