@@ -227,3 +227,9 @@ There 5 types of processors:
     * Fix issue in relative path management
     * Remove deprecated undercore reference and replace by lodash dependency
     * Fix deep array flattening for Node.JS >= 4
+* 0.6.0
+    * Add `keepTags` option to keep htmlbuild tags after build.
+    * Fix broken inlining for scripts containing `$x`.
+    * Upgrade `lodash` to v4 and fix template issue.
+    * Ensure `grunt` v1.0.0 compatibility.
+    * Optimize some code parts.
