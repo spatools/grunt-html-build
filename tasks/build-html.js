@@ -187,8 +187,14 @@ module.exports = function (grunt) {
 
         if (!options.inline || options.noprocess) {
             return template
-                    .replace("<%= src %>", src)
-                    .replace("<%= attributes %>", attrs);
+                    .replace(/\<\%\= (src|attributes) \%\>/g, function(match, p1) {
+                        if(p1 == 'src') {
+                            return src;
+                        }
+                        else if(p1 == 'attributes') {
+                            return attrs;
+                        }
+                    });
         }
         else {
             return processTemplate(template, options, src, attrs);
