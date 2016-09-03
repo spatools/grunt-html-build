@@ -358,9 +358,8 @@ module.exports = function (grunt) {
                 destPath, content;
 
             file.src.forEach(function (src) {
-
                 // replace files in the same folder
-                if (params.replac) {
+                if (params.replace) {
                     destPath = src;
                 }
                 // copy original folder structure into dest folder and compile templates

@@ -233,5 +233,6 @@ There 5 types of processors:
     * Fix broken inlining for scripts containing `$x`.
     * Upgrade `lodash` to v4 and fix template issue.
     * Ensure `grunt` v1.0.0 compatibility.
+ * 0.6.1
     * Optimize some code parts.
     * Added option `basePath` allow keeping original folder structure
