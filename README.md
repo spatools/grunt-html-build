@@ -26,6 +26,7 @@ grunt.initConfig({
                 beautify: true,
                 prefix: '//some-cdn',
                 relative: true,
+                basePath: false,
                 scripts: {
                     bundle: [
                         '<%= fixturesPath %>/scripts/*.js',
@@ -233,3 +234,4 @@ There 5 types of processors:
     * Upgrade `lodash` to v4 and fix template issue.
     * Ensure `grunt` v1.0.0 compatibility.
     * Optimize some code parts.
+    * Added option `basePath` allow keeping original folder structure

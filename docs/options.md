@@ -14,6 +14,7 @@ grunt.initConfig({
             dest: 'samples/',
             options: {
                 beautify: true,
+                basePath: false,
                 scripts: {
                     bundle: [
                         'scripts/*.js',
@@ -121,6 +122,32 @@ scripts: {
  **default:** false
 
 True to beautify HTML result
+
+### options.basePath
+
+**type :** string |
+**optional** |
+**default:** false
+
+Set to copy the whole folder structure.
+
+```javascript
+grunt.initConfig({
+    htmlbuild: {
+        dev: { // compile with dev options
+            src: 'source/app/**/*.html',
+            dest: 'tmp/',
+            options: {
+                basePath: 'source/',
+                // destination path = dest + ( src with 'basePath' cut away)
+                // sourcefile: 'source/app/customers/customer.html'
+                // dest = 'tmp/' +  'app/customers/customer.html'
+                // dest = 'tmp/app/customers/customer.html'
+            }
+        }
+    }
+)};
+```
 
 ### options.logOptions
  **type :** bool |
