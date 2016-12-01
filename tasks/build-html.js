@@ -91,7 +91,7 @@ module.exports = function (grunt) {
     function defaultProcessPath(pathes, params, opt) { //takes an array of paths and validates them
         var local = grunt.file.expand(opt, pathes),
             flattenPaths = _.isArray(pathes) ? _.flattenDeep(pathes) : pathes,
-            remote = _.map(flattenPaths, path.normalize).filter(function (path) { //for loading from cdn
+            remote = flattenPaths.filter(function (path) { //for loading from cdn
                 return /^((http|https):)?(\\|\/\/)/.test(path); //is http, https, or //
             });
 
@@ -205,7 +205,7 @@ module.exports = function (grunt) {
             var destDir = options.relative && isFileRegex.test(options.dest) ? path.dirname(options.dest) : options.dest;
 
             return options.files.map(function (f) {
-                var url = options.relative ? path.relative(destDir, f) : f;
+                var url = (options.relative && !/^((http|https):)?(\\|\/\/)/.test(f) ) ? path.relative(destDir, f) : f;
                 url = url.replace(/\\/g, "/");
 
                 if (options.prefix) {
