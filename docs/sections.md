@@ -23,7 +23,7 @@ Let's take an application directory like this :
 		...
 	</head>
 	<body>
-		<!-- build:section views --><!-- /build -->
+		<!-- build:section recursive views --><!-- /build -->
 		<!-- build:section templates --><!-- /build -->
 	</body>
 </html>
@@ -46,6 +46,10 @@ grunt.initConfig({
 });
 ```
 
-After grunt build, created index.html will contains any files in views and tmpl directories.
+After grunt build process the index.html file will contain files in views and template directories.
+
+### Recursive option
+
+If the __recursive__ option is specified in the tag, __grunt-html-build__ will recursively build every views passed in the section.
 
 Useful to create a main layout file and cut your work in little files.

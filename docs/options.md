@@ -14,7 +14,6 @@ grunt.initConfig({
             dest: 'samples/',
             options: {
                 beautify: true,
-                basePath: false,
                 scripts: {
                     bundle: [
                         'scripts/*.js',
@@ -62,7 +61,7 @@ Specify output directory to create results in
  **type:** object |
  **required**
 
-Additionnal Options
+Additional Options
 
 ### options.scripts, options.styles, options.sections
  **type:** object |
@@ -116,6 +115,41 @@ scripts: {
 <!-- /build -->
 ```
 
+### options.prefix
+ **type :** string |
+ **optional** |
+ **default:** null
+
+Append this prefix to all paths in script and style references.
+
+### options.suffix
+ **type :** string, function |
+ **optional** |
+ **default:** null
+
+Append this suffix to to CSS and JS files. Could be a `function(filename, url)` which return a string. The result will be appended to the URL in the form `{url}?{suffix}`
+
+### options.relative
+ **type :** string |
+ **optional** |
+ **default:** true
+
+Make generated path relative to dest path. If this arguments is specified with false value, generated paths will be written as you configure in your Gruntfile.
+
+### options.replace
+ **type :** bool |
+ **optional** |
+ **default:** false
+
+True to replace src file instead of creating a new file.
+
+### options.keepTags
+ **type:** boolean |
+ **optional** |
+ **default:** false
+
+True to keep `htmlbuild` special tags after HTML compilation.
+
 ### options.beautify
  **type :** bool |
  **optional** |
@@ -155,3 +189,26 @@ grunt.initConfig({
  **default:** false
 
 Log an alert in console if some optional tags are not rendered
+
+### options.allowUnknownTags
+ **type :** bool |
+ **optional** |
+ **default:** false
+
+Do not fail the task if the parser meet unknown tags. 
+Useful when working with `grunt-usemin`.
+
+### options.parseTag
+ **type:** string |
+ **optional** |
+ **default:** 'build'
+
+Specify the html-build tag name, default is 'build'.
+Format : <!-- {options.parseTag}:{scripts|styles|sections|process|remove} {name} [attributes] -->
+
+### options.EOL
+ **type:** string |
+ **optional** |
+ **default:** *autodectect*
+
+Force output EOL. If not specified, it will be detected from the input file.
