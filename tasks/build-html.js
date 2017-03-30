@@ -211,6 +211,16 @@ module.exports = function (grunt) {
                     url = URL.resolve(options.prefix.replace(/\\/g, "/"), url);
                 }
 
+                if (options.suffix) {
+                    var suffix = typeof options.suffix === "function" ?
+                        options.suffix(f, url) :
+                        options.suffix;
+
+                    if (suffix) {
+                        url += "?" + suffix;
+                    }
+                }
+
                 return processHtmlTagTemplate(options, url);
             }).join(options.EOL);
         }
@@ -307,6 +317,7 @@ module.exports = function (grunt) {
                     files: tagFiles,
                     dest: dest,
                     prefix: params.prefix,
+                    suffix: params.suffix,
                     relative: params.relative,
                     EOL: params.EOL,
                     params: params
