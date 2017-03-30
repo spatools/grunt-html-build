@@ -29,7 +29,6 @@ module.exports = function (grunt) {
 
     var // Init
         _ = require("lodash"),
-        EOL = grunt.util.linefeed,
         URL = require("url"),
         path = require("path"),
         beautifier = require("js-beautify"),
@@ -198,14 +197,14 @@ module.exports = function (grunt) {
 
     function processHtmlTag(options) {
         if (options.inline) {
-            var content = options.files.map(grunt.file.read).join(EOL);
+            var content = options.files.map(grunt.file.read).join(options.EOL);
             return processHtmlTagTemplate(options, content);
         }
         else {
             var destDir = options.relative && isFileRegex.test(options.dest) ? path.dirname(options.dest) : options.dest;
 
             return options.files.map(function (f) {
-                var url = (options.relative && !/^((http|https):)?(\\|\/\/)/.test(f) ) ? path.relative(destDir, f) : f;
+                var url = (options.relative && !/^((http|https):)?(\\|\/\/)/.test(f)) ? path.relative(destDir, f) : f;
                 url = url.replace(/\\/g, "/");
 
                 if (options.prefix) {
@@ -213,7 +212,7 @@ module.exports = function (grunt) {
                 }
 
                 return processHtmlTagTemplate(options, url);
-            }).join(EOL);
+            }).join(options.EOL);
         }
     }
 
@@ -255,13 +254,13 @@ module.exports = function (grunt) {
                     return options.recursive ?
                         transformContent(content, options.params, options.dest) :
                         content;
-                }).join(EOL);
+                }).join(options.EOL);
             },
 
             process: function (options) {
                 return options.lines
                     .map(function (l) { return processTemplate(l, options); })
-                    .join(EOL)
+                    .join(options.EOL)
                     .replace(new RegExp(regexTagStart), "")
                     .replace(new RegExp(regexTagEnd), "");
             },
@@ -270,7 +269,7 @@ module.exports = function (grunt) {
 
                 var targets = options.name.split(",");
                 if (targets.indexOf(grunt.task.current.target) < 0) {
-                    return options.lines.join(EOL).replace(new RegExp(regexTagStart), "").replace(new RegExp(regexTagEnd), "");
+                    return options.lines.join(options.EOL).replace(new RegExp(regexTagStart), "").replace(new RegExp(regexTagEnd), "");
                 }
 
                 return "";
@@ -284,12 +283,21 @@ module.exports = function (grunt) {
 
     //#endregion
 
+    function ensureContent(content, params) {
+        if (!params.EOL) {
+            var match = content.match(/\r?\n/);
+            params.EOL = match ? match[0] : "\n";
+        }
+
+        return content.replace(/\r?\n/g, params.EOL);
+    }
+
     function transformContent(content, params, dest) {
         var tags = getBuildTags(content),
             config = grunt.config();
 
         tags.forEach(function (tag) {
-            var raw = tag.lines.join(EOL),
+            var raw = tag.lines.join(params.EOL),
                 result = "", prefix = "", suffix = "",
                 tagFiles = validators.validate(tag, params);
 
@@ -300,6 +308,7 @@ module.exports = function (grunt) {
                     dest: dest,
                     prefix: params.prefix,
                     relative: params.relative,
+                    EOL: params.EOL,
                     params: params
                 });
 
@@ -376,7 +385,9 @@ module.exports = function (grunt) {
                     destPath = path.join(dest, path.basename(src));
                 }
 
-                content = transformContent(grunt.file.read(src), params, dest);
+                content = grunt.file.read(src);
+                content = ensureContent(content, params);
+                content = transformContent(content, params, dest);
 
                 // write the contents to destination
                 grunt.file.write(destPath, content);
