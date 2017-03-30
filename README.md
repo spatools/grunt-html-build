@@ -235,4 +235,9 @@ There 5 types of processors:
     * Ensure `grunt` v1.0.0 compatibility.
  * 0.6.1
     * Optimize some code parts.
-    * Added option `basePath` allow keeping original folder structure
+    * Added option `basePath` allow keeping original folder structure.
+* 0.6.2
+    * Fix some issues.
+* 0.7.0
+    * Fix EOL inconsistent issue.
+    * Add suffix option to customize files query parameters (for cache).
