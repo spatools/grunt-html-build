@@ -1,4 +1,4 @@
-﻿/*
+/*
  * grunt-html-build
  * https://github.com/spatools/grunt-html-build
  * Copyright (c) 2013 SPA Tools
@@ -43,7 +43,8 @@ module.exports = function (grunt) {
         regexTagEndTemplate = "<!--\\s*\\/%parseTag%\\s*-->", // <!-- /build -->
         regexTagStart = "",
         regexTagEnd = "",
-        isFileRegex = /\.(\w+){2,4}$/;
+        isFileRegex = /\.(\w+){2,4}$/,
+        processedFile = "";
 
     //#endregion
 
@@ -111,6 +112,11 @@ module.exports = function (grunt) {
         }
 
         if (src) {
+            // check if we want to use current file name, if so update src where necessary
+            if( params.useFileName && src.toString().match(/_CURRENT_FILE_NAME_/g) ) {
+              src = src.toString().replace("_CURRENT_FILE_NAME_", processedFile);
+            }
+          
             var opt = {},
                 files = src;
 
@@ -363,6 +369,7 @@ module.exports = function (grunt) {
             relative: true,
             basePath: false,
             keepTags: false,
+            useFileName: false,
             scripts: {},
             styles: {},
             sections: {},
@@ -378,6 +385,9 @@ module.exports = function (grunt) {
                 destPath, content;
 
             file.src.forEach(function (src) {
+                // update with the name of the file currently being processed
+                processedFile = src.match(/(?!.+\/).+(?=\.)/g).toString().replace("/", "");
+              
                 // replace files in the same folder
                 if (params.replace) {
                     destPath = src;

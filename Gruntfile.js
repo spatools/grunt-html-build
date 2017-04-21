@@ -1,10 +1,10 @@
-﻿module.exports = function (grunt) {
+module.exports = function (grunt) {
     grunt.initConfig({
         fixturesPath: "fixtures",
 
         htmlbuild: {
             dist: {
-                src: './index.html',
+                src: './*.html',
                 dest: './samples/',
                 options: {
                     beautify: true,
@@ -12,6 +12,7 @@
                     //parseTag: 'htmlbuild',
                     // keepTags: true,
                     relative: true,
+                    useFileName: true,
                     scripts: {
                         bundle: [
                             '<%= fixturesPath %>/scripts/*.js',
@@ -33,7 +34,8 @@
                                 'css/another.less'
                             ]
                         },
-                        test: '<%= fixturesPath %>/css/inline.css'
+                        test: '<%= fixturesPath %>/css/inline.css',
+                        pageSpecific: '<%= fixturesPath %>/css/_CURRENT_FILE_NAME_.inline.css'
                     },
                     sections: {
                         views: '<%= fixturesPath %>/views/**/*.html',
