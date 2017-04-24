@@ -214,10 +214,17 @@ Format : <!-- {options.parseTag}:{scripts|styles|sections|process|remove} {name}
 Force output EOL. If not specified, it will be detected from the input file.
 
 
-### options.useFileName
+### options.processFiles
 
 **type :** boolean |
 **optional** |
 **default:** false
 
-Set to enable replacing _CURRENT_FILE_NAME_ in src for each file processed during build
+Set to true to enable files src configuration replacement.
+By enabling it, the following keywords will be replaced in src for each file processed during build:
+* `$(filename)`: Current filename (without extension).
+* `$(file)`: Current filename (with extension).
+* `$(dirname)`: Current directory name.
+* `$(path)`: Current file path.
+* `$(dir)`: Current directory path.
+* `$(platform)`: The result of `process.platform`.

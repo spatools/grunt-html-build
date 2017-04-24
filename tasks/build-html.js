@@ -156,6 +156,17 @@ module.exports = function (grunt) {
         regexTagEnd = regexTagEndTemplate.replace(/%parseTag%/, function () { return parseTag });
     }
 
+    function createFilesContext(src) {
+        return {
+            path: src,
+            dir: path.dirname(src),
+            file: path.basename(src),
+            filename: path.basename(src, path.extname(src)),
+            dirname: path.basename(path.dirname(src)),
+            platform: process.platform
+        };
+    }
+
     //#endregion
 
     //#region Processors Methods
@@ -369,16 +380,6 @@ module.exports = function (grunt) {
         }
 
         return content;
-    }
-
-    function createFilesContext(src) {
-        return {
-            path: src,
-            dir: path.dirname(src),
-            filename: path.basename(src, path.extname(src)),
-            dirname: path.basename(path.dirname(src)),
-            platform: process.platform
-        };
     }
 
     grunt.registerMultiTask('htmlbuild', "Grunt HTML Builder - Replace scripts and styles, Removes debug parts, append html partials, Template options", function () {
