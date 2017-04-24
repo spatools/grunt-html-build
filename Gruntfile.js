@@ -12,7 +12,7 @@ module.exports = function (grunt) {
                     //parseTag: 'htmlbuild',
                     // keepTags: true,
                     relative: true,
-                    useFileName: true,
+                    processFiles: true,
                     scripts: {
                         bundle: [
                             '<%= fixturesPath %>/scripts/*.js',
@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                             ]
                         },
                         test: '<%= fixturesPath %>/css/inline.css',
-                        pageSpecific: '<%= fixturesPath %>/css/_CURRENT_FILE_NAME_.inline.css'
+                        pageSpecific: '<%= fixturesPath %>/css/$(filename).inline.css'
                     },
                     sections: {
                         views: '<%= fixturesPath %>/views/**/*.html',

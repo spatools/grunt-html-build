@@ -44,7 +44,7 @@ module.exports = function (grunt) {
         regexTagStart = "",
         regexTagEnd = "",
         isFileRegex = /\.(\w+){2,4}$/,
-        processedFile = "";
+        processFileRegex = /\$\(([^\)]*)\)/;
 
     //#endregion
 
@@ -133,6 +133,15 @@ module.exports = function (grunt) {
 
             if (!Array.isArray(files)) {
                 files = [files];
+            }
+
+            if (params.processFiles) {
+                var filesContext = params.filesContext;
+                files = files.map(function(f) {
+                    return f.replace(processFileRegex, function(val, name) {
+                        return filesContext[name] || val;
+                    });
+                });
             }
 
             return params.processPath(files, params, opt);
@@ -362,6 +371,16 @@ module.exports = function (grunt) {
         return content;
     }
 
+    function createFilesContext(src) {
+        return {
+            path: src,
+            dir: path.dirname(src),
+            filename: path.basename(src, path.extname(src)),
+            dirname: path.basename(path.dirname(src)),
+            platform: process.platform
+        };
+    }
+
     grunt.registerMultiTask('htmlbuild', "Grunt HTML Builder - Replace scripts and styles, Removes debug parts, append html partials, Template options", function () {
         var params = this.options({
             beautify: false,
@@ -369,12 +388,12 @@ module.exports = function (grunt) {
             relative: true,
             basePath: false,
             keepTags: false,
-            useFileName: false,
             scripts: {},
             styles: {},
             sections: {},
             data: {},
             parseTag: 'build',
+            processFiles: false,
             processPath: defaultProcessPath
         });
 
@@ -385,8 +404,9 @@ module.exports = function (grunt) {
                 destPath, content;
 
             file.src.forEach(function (src) {
-                // update with the name of the file currently being processed
-                processedFile = src.match(/(?!.+\/).+(?=\.)/g).toString().replace("/", "");
+                if (params.processFiles) {
+                    params.filesContext = createFilesContext(src);
+                }
               
                 // replace files in the same folder
                 if (params.replace) {
