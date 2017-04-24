@@ -1,4 +1,4 @@
-﻿# grunt-html-build
+# grunt-html-build
 
 ## Task Options
 
@@ -212,3 +212,12 @@ Format : <!-- {options.parseTag}:{scripts|styles|sections|process|remove} {name}
  **default:** *autodectect*
 
 Force output EOL. If not specified, it will be detected from the input file.
+
+
+### options.useFileName
+
+**type :** boolean |
+**optional** |
+**default:** false
+
+Set to enable replacing _CURRENT_FILE_NAME_ in src for each file processed during build
