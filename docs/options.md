@@ -183,7 +183,7 @@ grunt.initConfig({
 )};
 ```
 
-### options.logOptions
+### options.logOptionals
  **type :** bool |
  **optional** |
  **default:** false
